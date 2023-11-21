@@ -1,5 +1,5 @@
-const int outputPins = {0, 1, 2, 3};
-const int intputPins = {4, 5, 6, 7};
+const int outputPins[] = {2, 3, 4, 5};
+const int inputPins[] = {6, 7, 8, 9};
 
 
 void setup() {
@@ -13,5 +13,10 @@ void setup() {
 }
 
 void loop() {
-  
+  for (int i = 0; i < 4; i++) {
+    digitalWrite(outputPins[i], HIGH); // Set the pin HIGH
+    delay(500); // Wait for 500 milliseconds (adjust as needed)
+    digitalWrite(outputPins[i], LOW);  // Set the pin LOW
+    delay(500); // Wait for 500 milliseconds (adjust as needed)
+  }
 }
