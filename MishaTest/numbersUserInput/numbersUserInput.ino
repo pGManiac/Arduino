@@ -2,9 +2,10 @@ void setup() {
   // put your setup code here, to run once:
 
   Serial.begin(9600);
-  //set PORTD for output and PORTB for input
-  DDRD = 0x0F;
+  //set PORTC for output and PORTB for input
+  DDRC = 0x0F;
   DDRB = 0x00;
+  PORTB = 0x00;
   //enable PCINT for PB0-PB3
   PCICR = 0x01;
   PCMSK0 = 0x0F;
@@ -25,10 +26,10 @@ void loop() {
     Serial.print("Received: ");
     Serial.println(userInput);
 
-    PORTD = userInput;
+    PORTC = userInput;
     Serial.print("OUTPUT: ");
     for (int i = 7; i >= 0; --i) {
-    Serial.print(bitRead(PORTD, i));
+    Serial.print(bitRead(PORTC, i));
     }
     Serial.println();
     
