@@ -11,3 +11,4 @@ Logicanalyser:
 Mit Gerät verbinden -> Gerät suchen, das hinten auf logic analyser steht -> auswählen
 
 Mit den zwei Feldern oben rechts ausprobieren
+
