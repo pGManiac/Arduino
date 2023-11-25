@@ -4,12 +4,11 @@ const byte xorChecksum = 0b01010101;
 /**
  * @brief Represents a frame with bit vector and state information.
  *
- * The Frame struct encapsulates a data frame with a 16-bit bit vector
- * and a frame state indicating whether it's data, an acknowledgment (ACK),
- * or an error.
+ * The Frame struct encapsulates a data frame with a byte for data, a byte for checksum and a byte for Data/Ack/Error
  */
 struct Frame {
-  bool bitvector[16];
+  byte data;
+  byte checksum;
   byte frameState; /**< Frame state indicating data, ACK, or Error. 
                          - 00: Data
                          - 01: ACK
@@ -19,31 +18,24 @@ struct Frame {
    /**
      * @brief Default constructor.
      *
-     * Initializes the bit vector to all false values.
+     * Initializes all bits to 0;
      */
   Frame() {
-    for(int i = 0; i < 16; i++) {
-      bitvector[i] = false;
-    }
+    0 << data;
+    0 << checksum;
+    0 << frameState;
   }
 
   /**
      * @brief Parameterized constructor.
      *
      * Creates a data Frame based on the provided data byte.
-     * Most significant byte comes first for both data and checksum.
      *
      * @param data The data byte used to construct the frame.
      */
-  Frame(byte data) {
-    //Fill index 0 - 7 with bits from data byte, highest significant bit comes first
-    for (int i = 7; i >=0; i--) {
-            bitvector[i] = (data & (1 << i)) != 0;
-        }
+  Frame(byte _data) : data(_data) {
     //Fill index 8-15 with bits from checksum, highest significant bit comes first
-    for (int i = 15; i>=8; i--) {
-            bitvector[i] = (data ^ xorChecksum) & (1 << (i-8));
-        }
+    checksum = _data ^ xorChecksum;
     0 << frameState;
   }
 };
