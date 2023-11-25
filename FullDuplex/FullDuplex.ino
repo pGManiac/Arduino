@@ -38,6 +38,10 @@ struct Frame {
     checksum = _data ^ xorChecksum;
     0 << frameState;
   }
+
+  Frame(bool response) {
+
+  }
 };
 
 /**
@@ -100,11 +104,71 @@ struct Queue {
           head = newNode;
         }
       }
+    
+    void dequeue() {
+
+    }
 };
+
+void send() {
+
+}
+
+void sendFrame(int s, Frame* framePtr) {
+
+  byte quarter = 0x00;
+
+  switch (s) {
+    case 0:
+      //send data from highest to lowest
+      quarter = (framePtr.data & 0xC0) >> 6;
+      PORTC = 0x08 | quarter;
+      quarter = (framePtr.data & 0x30) >> 4;
+      PORTC = 0x04 | quarter;
+      quarter = (framePtr.data & 0x0C) >> 2;
+      PORTC = 0x00 | quarter;
+      quarter = framePtr.data & 0x03;
+      PORTC = 0x04 | quarter;
+
+      //send checksum from highest to lowest
+      quarter = (framePtr.checksum & 0xC0) >> 6;
+      PORTC = 0x00 | quarter;
+      quarter = (framePtr.checksum & 0x30) >> 4;
+      PORTC = 0x04 | quarter;
+      quarter = (framePtr.checksum & 0x0C) >> 2;
+      PORTC = 0x00 | quarter;
+      quarter = framePtr.checksum & 0x03;
+      PORTC = 0x04 | quarter;
+
+      break;
+    case 1:
+      //send acknowledge
+      quarter = framePtr.data & 0x03;
+      PORTC = 0x0C | quarter;
+      PORTC = 0x00 | quarter;
+      PORTC = 0x04 | quarter;
+      PORTC = 0x00 | quarter;
+      break;
+    case 2:
+      //send error
+      quarter = framePtr.data & 0x03;
+      PORTC = 0x0C | quarter;
+      PORTC = 0x00 | quarter;
+      PORTC = 0x04 | quarter;
+      PORTC = 0x00 | quarter;
+      break;
+  }
+}
 
 void setup() {
   
-
+  Serial.begin(9600);
+  //set PORTC for output and PORTB for input
+  DDRC = 0x0F;
+  DDRB = 0x00;
+  //enable PCINT for PB0-PB3
+  PCICR = 0x01;
+  PCMSK0 = 0x0F;
 }
 
 void loop() {
