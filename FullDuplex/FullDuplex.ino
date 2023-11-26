@@ -40,7 +40,7 @@ struct Frame {
     0 << frameState;
   }
 
-  Frame(bool response) {
+  Frame(byte _data, byte _checksum) : data(_data), checksum(_checksum) {
 
   }
 };
@@ -158,11 +158,19 @@ void sendFrame(Frame* framePtr) {
       PORTC = 0x00 | quarter;
       PORTC = 0x04 | quarter;
       PORTC = 0x00 | quarter;
+      PORTC = 0x04 | quarter;
+      PORTC = 0x00 | quarter;
+      PORTC = 0x04 | quarter;
+      PORTC = 0x00 | quarter;
       break;
     case 2:
       //send error
       quarter = framePtr.data & 0x03;
       PORTC = 0x0C | quarter;
+      PORTC = 0x00 | quarter;
+      PORTC = 0x04 | quarter;
+      PORTC = 0x00 | quarter;
+      PORTC = 0x04 | quarter;
       PORTC = 0x00 | quarter;
       PORTC = 0x04 | quarter;
       PORTC = 0x00 | quarter;
@@ -174,8 +182,30 @@ void sendFrame(Frame* framePtr) {
       PORTC = 0x00 | quarter;
       PORTC = 0x04 | quarter;
       PORTC = 0x00 | quarter;
+      PORTC = 0x04 | quarter;
+      PORTC = 0x00 | quarter;
+      PORTC = 0x04 | quarter;
+      PORTC = 0x00 | quarter;
       break;
   }
+}
+
+ISR(PCINT0_vect) {
+  //read PORTB and print byte on terminal
+
+  if (bitRead(PINB, 3) == 1) {
+
+    byte defragData = 0x00;
+    byte defragCheck = 0x00;
+    attachInterrupt(digitalPinToInterrupt(10), readQuarter(), CHANGE);
+
+  } else {
+    //frage welche Leitungen herausgezogen werden können
+  }
+}
+
+void readQuarter() {
+
 }
 
 void setup() {
@@ -186,7 +216,11 @@ void setup() {
   DDRB = 0x00;
   //enable PCINT for PB0-PB3
   PCICR = 0x01;
-  PCMSK0 = 0x0F;
+  PCMSK0 = 0x0B;
+
+  //set up queues
+  Queue sending = Queue();
+  Queue receiving = Queue();
 }
 
 void loop() {
