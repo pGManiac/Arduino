@@ -12,7 +12,8 @@ struct Frame {
   byte frameState; /**< Frame state indicating data, ACK, or Error. 
                          - 00: Data
                          - 01: ACK
-                         - 11: Error
+                         - 10: Error
+                         - 11: handshake request
                      */
 
    /**
@@ -114,7 +115,20 @@ void send() {
 
 }
 
-void sendFrame(int s, Frame* framePtr) {
+/**
+ * @brief Sends a Frame using a specified transmission mode.
+ *
+ * This function sends the data and checksum from the provided Frame using the
+ * specified transmission mode. The transmission mode determines the format and
+ * sequence in which the data and checksum are sent.
+ *
+ * @param s The transmission mode:
+ *          - 0: Send data and checksum from highest to lowest bits.
+ *          - 1: Send an acknowledgment frame.
+ *          - 2: Send an error frame.
+ * @param framePtr Pointer to the Frame to be transmitted.
+ */
+void sendFrame(byte s, Frame* framePtr) {
 
   byte quarter = 0x00;
 
@@ -151,6 +165,14 @@ void sendFrame(int s, Frame* framePtr) {
       break;
     case 2:
       //send error
+      quarter = framePtr.data & 0x03;
+      PORTC = 0x0C | quarter;
+      PORTC = 0x00 | quarter;
+      PORTC = 0x04 | quarter;
+      PORTC = 0x00 | quarter;
+      break;
+    case 3:
+      //send handshake request
       quarter = framePtr.data & 0x03;
       PORTC = 0x0C | quarter;
       PORTC = 0x00 | quarter;
