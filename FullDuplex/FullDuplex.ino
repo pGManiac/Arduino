@@ -122,17 +122,13 @@ void send() {
  * specified transmission mode. The transmission mode determines the format and
  * sequence in which the data and checksum are sent.
  *
- * @param s The transmission mode:
- *          - 0: Send data and checksum from highest to lowest bits.
- *          - 1: Send an acknowledgment frame.
- *          - 2: Send an error frame.
  * @param framePtr Pointer to the Frame to be transmitted.
  */
-void sendFrame(byte s, Frame* framePtr) {
+void sendFrame(Frame* framePtr) {
 
   byte quarter = 0x00;
 
-  switch (s) {
+  switch (framePtr.frameState) {
     case 0:
       //send data from highest to lowest
       quarter = (framePtr.data & 0xC0) >> 6;
