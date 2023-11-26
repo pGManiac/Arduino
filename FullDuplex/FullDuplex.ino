@@ -40,9 +40,7 @@ struct Frame {
     0 << frameState;
   }
 
-  Frame(byte _data, byte _checksum) : data(_data), checksum(_checksum) {
-
-  }
+  Frame(byte _data, byte _checksum, byte _frameState) : data(_data), checksum(_checksum), frameState(_frameState) {}
 };
 
 /**
@@ -190,22 +188,40 @@ void sendFrame(Frame* framePtr) {
   }
 }
 
-ISR(PCINT0_vect) {
-  //read PORTB and print byte on terminal
-
+void readQuarter() {
   if (bitRead(PINB, 3) == 1) {
-
-    byte defragData = 0x00;
-    byte defragCheck = 0x00;
-    attachInterrupt(digitalPinToInterrupt(10), readQuarter(), CHANGE);
-
-  } else {
-    //frage welche Leitungen herausgezogen werden können
+    defragData = 0x00;
+    defragCheck = 0x00;
+    readCounter = 0;
   }
+  
+  if (readCounter < 4) {
+    for (uint8_t i = 1; i >= 0; --i) {
+      defragData << (bitRead(PINB, i));
+    }
+    readCounter++;
+  } else if ((4 <= readCounter) && (readCounter < 8)){
+    for (uint8_t i = 1; i >= 0; --i) {
+      defragCheck << (bitRead(PINB, i));
+    }
+    readCounter++;
+  } else {
+    Frame received = Frame(defragData, defragCheck, calcState(defragData, defragCheck));
+  }
+  
+  //Bedenken: welche Kabel zieht Ulbricht raus?
+  //ist die Abarbeitung des if schnell genug oder ändert sich der Input währenddessen wieder?
+  //Queue?  
 }
 
-void readQuarter() {
-
+byte calcState(byte _defragData, byte _defragCheck) {
+  byte state = 0x00;
+  if ((_defragData ^ xorChecksum) == _defragCheck) {
+    state = 0x01;
+  } else {
+    state = 0x02;
+  }
+  return state;
 }
 
 void setup() {
@@ -215,12 +231,17 @@ void setup() {
   DDRC = 0x0F;
   DDRB = 0x00;
   //enable PCINT for PB0-PB3
-  PCICR = 0x01;
-  PCMSK0 = 0x0B;
+  //PCICR = 0x01;
+  //PCMSK0 = 0x0B;
+  attachInterrupt(digitalPinToInterrupt(10), readQuarter(), CHANGE);
 
   //set up queues
   Queue sending = Queue();
   Queue receiving = Queue();
+
+  volatile byte defragData = 0x00;
+  volatile byte defragCheck = 0x00;
+  volatile byte readCounter = 0;
 }
 
 void loop() {
