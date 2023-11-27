@@ -46,6 +46,7 @@ struct Frame {
   }
 
   Frame(byte _data, byte _frameState) {
+    data = _data;
     checksum = _data ^xorChecksum;
     frameState = _frameState;
   }
@@ -199,6 +200,7 @@ void sendFrame(Frame* framePtr) {
 }
 
 void readQuarter() {
+  Serial.println(11);
   if (bitRead(PINB, 3) == 1) {
     defragData = 0x00;
     defragCheck = 0x00;
@@ -242,7 +244,7 @@ void setup() {
   DDRC = 0x0F;
   DDRB = 0x00;
   //enable PCINT for PB0-PB3
-  //PCICR = 0x01;
+  PCICR = 0x01;
   //PCMSK0 = 0x0B;
   attachInterrupt(digitalPinToInterrupt(10), readQuarter, CHANGE);
 
@@ -257,8 +259,8 @@ void loop() {
 
   
   if (Serial.available() > 0) {
-    uint8_t input = Serial.parseInt();
-    Frame frame = new Frame(input, 0x00);
+    int input = Serial.parseInt();
+    Frame frame(input, 0x00);
 
     sendFrame(&frame);
     Serial.println(frame.data);
