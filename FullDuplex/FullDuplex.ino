@@ -199,7 +199,7 @@ void sendFrame(Frame* framePtr) {
   }
 }
 
-void readQuarter() {
+ISR(PCINT0_vect) {
   Serial.println(11);
   if (bitRead(PINB, 3) == 1) {
     defragData = 0x00;
@@ -245,8 +245,8 @@ void setup() {
   DDRB = 0x00;
   //enable PCINT for PB0-PB3
   PCICR = 0x01;
-  //PCMSK0 = 0x0B;
-  attachInterrupt(digitalPinToInterrupt(10), readQuarter, CHANGE);
+  PCMSK0 = 0x04;
+  //attachInterrupt(digitalPinToInterrupt(10), readQuarter, CHANGE);
 
   //set up queues
   Queue sending = Queue();
