@@ -1,6 +1,11 @@
 const byte xorChecksum = 0b01010101;
 
 
+  volatile byte defragData = 0x00;
+  volatile byte defragCheck = 0x00;
+  volatile byte readCounter = 0;
+
+
 /**
  * @brief Represents a frame with bit vector and state information.
  *
@@ -38,6 +43,11 @@ struct Frame {
     //Fill index 8-15 with bits from checksum, highest significant bit comes first
     checksum = _data ^ xorChecksum;
     0 << frameState;
+  }
+
+  Frame(byte _data, byte _frameState) {
+    checksum = _data ^xorChecksum;
+    frameState = _frameState;
   }
 
   Frame(byte _data, byte _checksum, byte _frameState) : data(_data), checksum(_checksum), frameState(_frameState) {}
@@ -126,32 +136,32 @@ void sendFrame(Frame* framePtr) {
 
   byte quarter = 0x00;
 
-  switch (framePtr.frameState) {
+  switch (framePtr->frameState) {
     case 0:
       //send data from highest to lowest
-      quarter = (framePtr.data & 0xC0) >> 6;
+      quarter = (framePtr->data & 0xC0) >> 6;
       PORTC = 0x08 | quarter;
-      quarter = (framePtr.data & 0x30) >> 4;
+      quarter = (framePtr->data & 0x30) >> 4;
       PORTC = 0x04 | quarter;
-      quarter = (framePtr.data & 0x0C) >> 2;
+      quarter = (framePtr->data & 0x0C) >> 2;
       PORTC = 0x00 | quarter;
-      quarter = framePtr.data & 0x03;
+      quarter = framePtr->data & 0x03;
       PORTC = 0x04 | quarter;
 
       //send checksum from highest to lowest
-      quarter = (framePtr.checksum & 0xC0) >> 6;
+      quarter = (framePtr->checksum & 0xC0) >> 6;
       PORTC = 0x00 | quarter;
-      quarter = (framePtr.checksum & 0x30) >> 4;
+      quarter = (framePtr->checksum & 0x30) >> 4;
       PORTC = 0x04 | quarter;
-      quarter = (framePtr.checksum & 0x0C) >> 2;
+      quarter = (framePtr->checksum & 0x0C) >> 2;
       PORTC = 0x00 | quarter;
-      quarter = framePtr.checksum & 0x03;
+      quarter = framePtr->checksum & 0x03;
       PORTC = 0x04 | quarter;
 
       break;
     case 1:
       //send acknowledge
-      quarter = framePtr.data & 0x03;
+      quarter = framePtr->data & 0x03;
       PORTC = 0x0C | quarter;
       PORTC = 0x00 | quarter;
       PORTC = 0x04 | quarter;
@@ -163,7 +173,7 @@ void sendFrame(Frame* framePtr) {
       break;
     case 2:
       //send error
-      quarter = framePtr.data & 0x03;
+      quarter = framePtr->data & 0x03;
       PORTC = 0x0C | quarter;
       PORTC = 0x00 | quarter;
       PORTC = 0x04 | quarter;
@@ -175,7 +185,7 @@ void sendFrame(Frame* framePtr) {
       break;
     case 3:
       //send handshake request
-      quarter = framePtr.data & 0x03;
+      quarter = framePtr->data & 0x03;
       PORTC = 0x0C | quarter;
       PORTC = 0x00 | quarter;
       PORTC = 0x04 | quarter;
@@ -206,7 +216,8 @@ void readQuarter() {
     }
     readCounter++;
   } else {
-    Frame received = Frame(defragData, defragCheck, calcState(defragData, defragCheck));
+    Frame received = Frame(defragData, calcState(defragData, defragCheck));
+    Serial.println(received.data);
   }
   
   //Bedenken: welche Kabel zieht Ulbricht raus?
@@ -233,18 +244,26 @@ void setup() {
   //enable PCINT for PB0-PB3
   //PCICR = 0x01;
   //PCMSK0 = 0x0B;
-  attachInterrupt(digitalPinToInterrupt(10), readQuarter(), CHANGE);
+  attachInterrupt(digitalPinToInterrupt(10), readQuarter, CHANGE);
 
   //set up queues
   Queue sending = Queue();
   Queue receiving = Queue();
 
-  volatile byte defragData = 0x00;
-  volatile byte defragCheck = 0x00;
-  volatile byte readCounter = 0;
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
 
+  
+  if (Serial.available() > 0) {
+    uint8_t input = Serial.parseInt();
+    Frame frame = new Frame(input, 0x00);
+
+    sendFrame(&frame);
+    Serial.println(frame.data);
+  }
+ 
+
+  
 }
