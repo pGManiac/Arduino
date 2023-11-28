@@ -217,7 +217,8 @@ void sendFrame(Frame* framePtr) {
 }
 
 ISR(PCINT0_vect) {
-  if (bitRead(PINB, 3) == 1) {
+  byte checkStart = (PORTB & 0x08) >> 3;
+  if (checkStart == 1) {
     defragData = 0x00;
     saveData = 0x00;
     defragCheck = 0x00;
