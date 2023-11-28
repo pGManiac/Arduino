@@ -142,22 +142,38 @@ void sendFrame(Frame* framePtr) {
       //send data from highest to lowest
       quarter = (framePtr->data & 0xC0) >> 6;
       PORTC = 0x08 | quarter;
+      Serial.println(PORTC);
+      delay(2000);
       quarter = (framePtr->data & 0x30) >> 4;
       PORTC = 0x04 | quarter;
+      Serial.println(PORTC);
+      delay(2000);
       quarter = (framePtr->data & 0x0C) >> 2;
       PORTC = 0x00 | quarter;
+      Serial.println(PORTC);
+      delay(2000);
       quarter = framePtr->data & 0x03;
       PORTC = 0x04 | quarter;
+      Serial.println(PORTC);
+      delay(2000);
 
       //send checksum from highest to lowest
       quarter = (framePtr->checksum & 0xC0) >> 6;
       PORTC = 0x00 | quarter;
+      Serial.println(PORTC);
+      delay(2000);
       quarter = (framePtr->checksum & 0x30) >> 4;
       PORTC = 0x04 | quarter;
+      Serial.println(PORTC);
+      delay(2000);
       quarter = (framePtr->checksum & 0x0C) >> 2;
       PORTC = 0x00 | quarter;
+      Serial.println(PORTC);
+      delay(2000);
       quarter = framePtr->checksum & 0x03;
       PORTC = 0x04 | quarter;
+      Serial.println(PORTC);
+      delay(2000);
 
       break;
     case 1:
@@ -200,25 +216,28 @@ void sendFrame(Frame* framePtr) {
 }
 
 ISR(PCINT0_vect) {
-  Serial.println(11);
   if (bitRead(PINB, 3) == 1) {
     defragData = 0x00;
     defragCheck = 0x00;
     readCounter = 0;
+    Serial.println(readCounter);
   }
   
   if (readCounter < 4) {
-    for (uint8_t i = 1; i >= 0; --i) {
-      defragData << (bitRead(PINB, i));
+    for (uint8_t i = 0; i <= 1; ++i) {
+      defragData = defragData << (bitRead(PINB, (i%1)));
     }
     readCounter++;
+    Serial.println(readCounter);
   } else if ((4 <= readCounter) && (readCounter < 8)){
-    for (uint8_t i = 1; i >= 0; --i) {
-      defragCheck << (bitRead(PINB, i));
+    for (uint8_t i = 0; i <= 1; ++i) {
+      defragCheck = defragCheck << (bitRead(PINB, (i%1)));
     }
     readCounter++;
+    Serial.println(readCounter);
   } else {
     Frame received = Frame(defragData, calcState(defragData, defragCheck));
+    Serial.println(readCounter);
     Serial.println(received.data);
   }
   
@@ -252,11 +271,14 @@ void setup() {
   Queue sending = Queue();
   Queue receiving = Queue();
 
+  
+
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-
+  
+  sei();
   
   if (Serial.available() > 0) {
     int input = Serial.parseInt();
@@ -264,6 +286,7 @@ void loop() {
 
     sendFrame(&frame);
     Serial.println(frame.data);
+    
   }
  
 
