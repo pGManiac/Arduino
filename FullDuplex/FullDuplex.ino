@@ -4,6 +4,7 @@ const byte xorChecksum = 0b01010101;
   volatile byte defragData = 0x00;
   volatile byte defragCheck = 0x00;
   volatile byte readCounter = 0;
+  volatile byte saveData = 0x00;
 
 
 /**
@@ -218,6 +219,7 @@ void sendFrame(Frame* framePtr) {
 ISR(PCINT0_vect) {
   if (bitRead(PINB, 3) == 1) {
     defragData = 0x00;
+    saveData = 0x00;
     defragCheck = 0x00;
     readCounter = 0;
     Serial.println(readCounter);
@@ -225,13 +227,15 @@ ISR(PCINT0_vect) {
   
   if (readCounter < 4) {
     for (uint8_t i = 0; i <= 1; ++i) {
-      defragData = defragData << (bitRead(PINB, (i%1)));
+      saveData = (bitRead(PINB, (1-i))) << (2-i);
+      defragData |= saveData;
     }
     readCounter++;
     Serial.println(readCounter);
   } else if ((4 <= readCounter) && (readCounter < 8)){
     for (uint8_t i = 0; i <= 1; ++i) {
-      defragCheck = defragCheck << (bitRead(PINB, (i%1)));
+      saveData = (bitRead(PINB, (1-i))) << (2-i);
+      defragCheck |= saveData;
     }
     readCounter++;
     Serial.println(readCounter);
