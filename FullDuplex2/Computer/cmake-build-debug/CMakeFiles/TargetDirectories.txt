@@ -1,0 +1,3 @@
+/home/klames/Arduino/FullDuplex2/Computer/cmake-build-debug/CMakeFiles/Comuter.dir
+/home/klames/Arduino/FullDuplex2/Computer/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/klames/Arduino/FullDuplex2/Computer/cmake-build-debug/CMakeFiles/rebuild_cache.dir
