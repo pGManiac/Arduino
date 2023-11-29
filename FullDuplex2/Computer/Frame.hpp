@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+
 const uint8_t xorChecksum = 0b01010101;
 
 /**

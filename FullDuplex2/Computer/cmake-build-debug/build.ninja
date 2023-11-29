@@ -55,6 +55,12 @@ build CMakeFiles/Comuter.dir/FullDuplexComputer.cpp.o: CXX_COMPILER__Comuter_uns
   OBJECT_DIR = CMakeFiles/Comuter.dir
   OBJECT_FILE_DIR = CMakeFiles/Comuter.dir
 
+build CMakeFiles/Comuter.dir/GlobalVariables.cpp.o: CXX_COMPILER__Comuter_unscanned_Debug /home/klames/Arduino/FullDuplex2/Computer/GlobalVariables.cpp || cmake_object_order_depends_target_Comuter
+  DEP_FILE = CMakeFiles/Comuter.dir/GlobalVariables.cpp.o.d
+  FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/Comuter.dir
+  OBJECT_FILE_DIR = CMakeFiles/Comuter.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Comuter
@@ -63,7 +69,7 @@ build CMakeFiles/Comuter.dir/FullDuplexComputer.cpp.o: CXX_COMPILER__Comuter_uns
 #############################################
 # Link the executable Comuter
 
-build Comuter: CXX_EXECUTABLE_LINKER__Comuter_Debug CMakeFiles/Comuter.dir/FullDuplexComputer.cpp.o
+build Comuter: CXX_EXECUTABLE_LINKER__Comuter_Debug CMakeFiles/Comuter.dir/FullDuplexComputer.cpp.o CMakeFiles/Comuter.dir/GlobalVariables.cpp.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/Comuter.dir
   POST_BUILD = :

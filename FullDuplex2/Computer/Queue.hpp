@@ -1,5 +1,8 @@
 #pragma once
 
+#include <fstream>
+
+
 #include "Frame.hpp"
 
 /**
@@ -79,9 +82,32 @@ struct Queue {
 
 
 struct SendingQueue : public Queue {
+    bool acknowledgementReceived;
 
+    SendingQueue() : acknowledgementReceived(false) {}
 };
 
 struct ReceivedQueue : public Queue {
 
+};
+
+struct Queues {
+    SendingQueue sendingQueue;
+    ReceivedQueue receivedQueue;
+    std::ofstream arduino;
+
+    void send() {
+        if (sendingQueue.acknowledgementReceived == false) {
+            // Do something when acknowledgement is not received
+        } else {
+            if (sendingQueue.head != nullptr) {
+                arduino.write(reinterpret_cast<const char *>(sendingQueue.head->frame->hardWareBytes),
+                              sizeof(sendingQueue.head->frame->hardWareBytes));
+            }
+        }
+    }
+
+    void receive() {
+
+    }
 };
