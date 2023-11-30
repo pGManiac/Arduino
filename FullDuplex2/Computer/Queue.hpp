@@ -96,6 +96,8 @@ struct Queues {
     ReceivedQueue receivedQueue;
     std::ofstream arduino;
 
+    Queues() : arduino("/dev/ttyUSB0") {}
+
     void send() {
         if (sendingQueue.acknowledgementReceived == false) {
             // Do something when acknowledgement is not received
@@ -106,6 +108,7 @@ struct Queues {
             }
         }
     }
+
 
     void receive() {
 
