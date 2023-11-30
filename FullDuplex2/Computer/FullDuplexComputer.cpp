@@ -2,16 +2,20 @@
 
 #include "Queue.hpp"
 
-Queues queues;
 
 
-int main() {
-    if(!queues.arduino.is_open()) {
-        std::cout << "Error: Couldn´t open the serial port. \n";
-        return -1;
+int main()
+{
+    uint8_t data = 10;
+
+    FILE *file;
+    file = fopen("/dev/ttyUSB0", "w");
+    if (file == NULL) {
+        perror("Error opening file");
+        return 1; // Exit with an error code
     }
-    while (true) {
-
+    for(int i = 0; i < 10; i++) {
+        fprintf(file, "%d", data);
     }
-
+    fclose(file);
 }

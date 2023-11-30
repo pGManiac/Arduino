@@ -38,9 +38,9 @@
 			[
 				{
 					"directoryIndex" : 0,
-					"id" : "Comuter::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-Comuter-Debug-a5f6ffff1b65f9955b91.json",
-					"name" : "Comuter",
+					"id" : "Computer::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Computer-Debug-d60bc632bf516a713ebb.json",
+					"name" : "Computer",
 					"projectIndex" : 0
 				}
 			]

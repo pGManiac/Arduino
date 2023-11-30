@@ -41,35 +41,35 @@ include CMakeFiles/rules.ninja
 
 cmake_ninja_workdir = /home/klames/Arduino/FullDuplex2/Computer/cmake-build-debug/
 # =============================================================================
-# Object build statements for EXECUTABLE target Comuter
+# Object build statements for EXECUTABLE target Computer
 
 
 #############################################
-# Order-only phony target for Comuter
+# Order-only phony target for Computer
 
-build cmake_object_order_depends_target_Comuter: phony || CMakeFiles/Comuter.dir
+build cmake_object_order_depends_target_Computer: phony || CMakeFiles/Computer.dir
 
-build CMakeFiles/Comuter.dir/FullDuplexComputer.cpp.o: CXX_COMPILER__Comuter_unscanned_Debug /home/klames/Arduino/FullDuplex2/Computer/FullDuplexComputer.cpp || cmake_object_order_depends_target_Comuter
-  DEP_FILE = CMakeFiles/Comuter.dir/FullDuplexComputer.cpp.o.d
+build CMakeFiles/Computer.dir/FullDuplexComputer.cpp.o: CXX_COMPILER__Computer_unscanned_Debug /home/klames/Arduino/FullDuplex2/Computer/FullDuplexComputer.cpp || cmake_object_order_depends_target_Computer
+  DEP_FILE = CMakeFiles/Computer.dir/FullDuplexComputer.cpp.o.d
   FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
-  OBJECT_DIR = CMakeFiles/Comuter.dir
-  OBJECT_FILE_DIR = CMakeFiles/Comuter.dir
+  OBJECT_DIR = CMakeFiles/Computer.dir
+  OBJECT_FILE_DIR = CMakeFiles/Computer.dir
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target Comuter
+# Link build statements for EXECUTABLE target Computer
 
 
 #############################################
-# Link the executable Comuter
+# Link the executable Computer
 
-build Comuter: CXX_EXECUTABLE_LINKER__Comuter_Debug CMakeFiles/Comuter.dir/FullDuplexComputer.cpp.o
+build Computer: CXX_EXECUTABLE_LINKER__Computer_Debug CMakeFiles/Computer.dir/FullDuplexComputer.cpp.o
   FLAGS = -g
-  OBJECT_DIR = CMakeFiles/Comuter.dir
+  OBJECT_DIR = CMakeFiles/Computer.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = Comuter
-  TARGET_PDB = Comuter.dbg
+  TARGET_FILE = Computer
+  TARGET_PDB = Computer.dbg
 
 
 #############################################
@@ -105,7 +105,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 #############################################
 # Folder: /home/klames/Arduino/FullDuplex2/Computer/cmake-build-debug
 
-build all: phony Comuter
+build all: phony Computer
 
 # =============================================================================
 # Built-in targets
