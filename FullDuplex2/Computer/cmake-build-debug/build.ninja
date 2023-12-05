@@ -55,6 +55,12 @@ build CMakeFiles/Computer.dir/FullDuplexComputer.cpp.o: CXX_COMPILER__Computer_u
   OBJECT_DIR = CMakeFiles/Computer.dir
   OBJECT_FILE_DIR = CMakeFiles/Computer.dir
 
+build CMakeFiles/Computer.dir/SerialPort.cpp.o: CXX_COMPILER__Computer_unscanned_Debug /home/klames/Arduino/FullDuplex2/Computer/SerialPort.cpp || cmake_object_order_depends_target_Computer
+  DEP_FILE = CMakeFiles/Computer.dir/SerialPort.cpp.o.d
+  FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/Computer.dir
+  OBJECT_FILE_DIR = CMakeFiles/Computer.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Computer
@@ -63,7 +69,7 @@ build CMakeFiles/Computer.dir/FullDuplexComputer.cpp.o: CXX_COMPILER__Computer_u
 #############################################
 # Link the executable Computer
 
-build Computer: CXX_EXECUTABLE_LINKER__Computer_Debug CMakeFiles/Computer.dir/FullDuplexComputer.cpp.o
+build Computer: CXX_EXECUTABLE_LINKER__Computer_Debug CMakeFiles/Computer.dir/FullDuplexComputer.cpp.o CMakeFiles/Computer.dir/SerialPort.cpp.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/Computer.dir
   POST_BUILD = :

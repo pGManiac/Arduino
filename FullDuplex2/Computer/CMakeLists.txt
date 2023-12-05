@@ -7,4 +7,6 @@ add_executable(Computer
         FullDuplexComputer.cpp
         Frame.hpp
         Queue.hpp
+        SerialPort.hpp
+        SerialPort.cpp
 )
