@@ -4,18 +4,23 @@
 
 
 
-int main()
-{
-    uint8_t data = 10;
+#include "SerialPort.hpp"
 
-    FILE *file;
-    file = fopen("/dev/ttyUSB0", "w");
-    if (file == NULL) {
-        perror("Error opening file");
-        return 1; // Exit with an error code
-    }
-    for(int i = 0; i < 10; i++) {
-        fprintf(file, "%d", data);
-    }
-    fclose(file);
+int main() {
+    const char* portName = "/dev/ttyUSB0";
+
+    SerialPort serial(portName);
+
+    // Configure the serial port
+    serial.configure();
+    usleep(5000000);
+
+    // Test sending data to Arduino
+    const uint8_t sendData = 0xFF;
+    serial.sendByte(&sendData, sizeof(sendData));
+
+    // Wait for a moment to ensure Arduino has processed the data
+    usleep(1000000);  // Sleep for 1 second
+
+    return 0;
 }

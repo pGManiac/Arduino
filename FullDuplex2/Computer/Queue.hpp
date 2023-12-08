@@ -91,7 +91,7 @@ struct ReceivedQueue : public Queue {
 
 };
 
-struct Queues {
+class Queues {
     SendingQueue sendingQueue;
     ReceivedQueue receivedQueue;
     std::ofstream arduino;

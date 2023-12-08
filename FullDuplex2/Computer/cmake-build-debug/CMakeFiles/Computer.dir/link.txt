@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/Computer.dir/FullDuplexComputer.cpp.o CMakeFiles/Computer.dir/SerialPort.cpp.o -o Computer 
