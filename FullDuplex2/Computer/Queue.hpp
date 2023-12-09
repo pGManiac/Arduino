@@ -4,6 +4,7 @@
 
 
 #include "Frame.hpp"
+#include "SerialPort.hpp"
 
 /**
  * @brief Represents a node in a linked list with Frame data.
@@ -91,20 +92,26 @@ struct ReceivedQueue : public Queue {
 
 };
 
+const char* portName = "/dev/ttyUSB0";
+
 class Queues {
+private:
     SendingQueue sendingQueue;
     ReceivedQueue receivedQueue;
-    std::ofstream arduino;
+    SerialPort serialPort;
 
-    Queues() : arduino("/dev/ttyUSB0") {}
+public:
+    Queues() : serialPort(portName) {
+        serialPort.configure();
+    }
 
     void send() {
-        if (sendingQueue.acknowledgementReceived == false) {
+        if (!sendingQueue.acknowledgementReceived) {
             // Do something when acknowledgement is not received
         } else {
             if (sendingQueue.head != nullptr) {
-                arduino.write(reinterpret_cast<const char *>(sendingQueue.head->frame->hardWareBytes),
-                              sizeof(sendingQueue.head->frame->hardWareBytes));
+                serialPort.sendBytes(sendingQueue.head->frame->hardWareBytes,
+                                     sizeof(sendingQueue.head->frame->hardWareBytes));
             }
         }
     }

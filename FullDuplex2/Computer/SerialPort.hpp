@@ -18,6 +18,6 @@ public:
     ~SerialPort();
 
     void configure();
-    void sendByte(const uint8_t*, size_t);
+    void sendBytes(const uint8_t*, size_t);
     void receive8Bytes();
 };

@@ -17,7 +17,7 @@ int main() {
 
     // Test sending data to Arduino
     const uint8_t sendData = 0xFF;
-    serial.sendByte(&sendData, sizeof(sendData));
+    serial.sendBytes(&sendData, sizeof(sendData));
 
     // Wait for a moment to ensure Arduino has processed the data
     usleep(1000000);  // Sleep for 1 second

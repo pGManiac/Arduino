@@ -1,3 +1,3 @@
-/home/klames/Arduino/FullDuplex2/Computer/cmake-build-debug/CMakeFiles/Computer.dir
-/home/klames/Arduino/FullDuplex2/Computer/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/klames/Arduino/FullDuplex2/Computer/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/klames/CPPProjects/Arduino/FullDuplex2/Computer/cmake-build-debug/CMakeFiles/Computer.dir
+/home/klames/CPPProjects/Arduino/FullDuplex2/Computer/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/klames/CPPProjects/Arduino/FullDuplex2/Computer/cmake-build-debug/CMakeFiles/rebuild_cache.dir

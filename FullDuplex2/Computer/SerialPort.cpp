@@ -54,11 +54,12 @@ void SerialPort::configure() {
 }
 
 
-void SerialPort::sendByte(const uint8_t* data, size_t size) {
+void SerialPort::sendBytes(const uint8_t* data , size_t size) {
     if (write(fd, data, size) == -1) {
         std::cerr << "Error writing to serial port.\n";
     }
 }
+
 
 void SerialPort::receive8Bytes() {
     int bytesAvailable;
