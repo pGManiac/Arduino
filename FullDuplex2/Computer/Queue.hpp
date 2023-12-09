@@ -112,6 +112,7 @@ public:
             if (sendingQueue.head != nullptr) {
                 serialPort.sendBytes(sendingQueue.head->frame->hardWareBytes,
                                      sizeof(sendingQueue.head->frame->hardWareBytes));
+                sendingQueue.acknowledgementReceived = false;
             }
         }
     }

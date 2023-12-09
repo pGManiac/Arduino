@@ -38,7 +38,6 @@ struct ToBeSentToPC {
         }
     } else {
         Serial.println("Error: Queue is empty. Cannot dequeue.");
-        // Handle the error if needed
     }
 }
 
@@ -46,8 +45,7 @@ struct ToBeSentToPC {
 
 
 
-  void
-  setup() {
+void setup() {
   pinMode(testPin, OUTPUT);
   Serial.begin(9600);  // Use the same baud rate as in your C code
 }
