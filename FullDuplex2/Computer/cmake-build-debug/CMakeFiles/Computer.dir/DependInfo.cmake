@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/klames/CPPProjects/Arduino/FullDuplex2/Computer/FullDuplexComputer.cpp" "CMakeFiles/Computer.dir/FullDuplexComputer.cpp.o" "gcc" "CMakeFiles/Computer.dir/FullDuplexComputer.cpp.o.d"
-  "/home/klames/CPPProjects/Arduino/FullDuplex2/Computer/SerialPort.cpp" "CMakeFiles/Computer.dir/SerialPort.cpp.o" "gcc" "CMakeFiles/Computer.dir/SerialPort.cpp.o.d"
+  "/home/myoshka/Documents/HWP/Arduino/FullDuplex2/Computer/FullDuplexComputer.cpp" "CMakeFiles/Computer.dir/FullDuplexComputer.cpp.o" "gcc" "CMakeFiles/Computer.dir/FullDuplexComputer.cpp.o.d"
+  "/home/myoshka/Documents/HWP/Arduino/FullDuplex2/Computer/SerialPort.cpp" "CMakeFiles/Computer.dir/SerialPort.cpp.o" "gcc" "CMakeFiles/Computer.dir/SerialPort.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

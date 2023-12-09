@@ -68,10 +68,12 @@ void SerialPort::receive8Bytes() {
         return;
     }
 
-    if(bytesAvailable>= 8) {
-        ssize_t bytesRead = read(fd, read_buf, 8);
+    if(bytesAvailable>= 1) {
+        ssize_t bytesRead = read(fd, &buffByte, 1);
         if(bytesRead == -1) {
             std::cerr << "Error reading from serial port.\n";
+        } else {
+            this->read_buf.push_back(buffByte);
         }
     }
 }

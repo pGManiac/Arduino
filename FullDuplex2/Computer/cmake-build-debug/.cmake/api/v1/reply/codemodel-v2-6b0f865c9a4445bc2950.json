@@ -49,12 +49,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/klames/CPPProjects/Arduino/FullDuplex2/Computer/cmake-build-debug",
-		"source" : "/home/klames/CPPProjects/Arduino/FullDuplex2/Computer"
+		"build" : "/home/myoshka/Documents/HWP/Arduino/FullDuplex2/Computer/cmake-build-debug",
+		"source" : "/home/myoshka/Documents/HWP/Arduino/FullDuplex2/Computer"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 6
+		"minor" : 5
 	}
 }
