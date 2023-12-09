@@ -22,6 +22,9 @@ public:
 
     void configure();
     void sendBytes(const uint8_t*, size_t);
-    void receive8Bytes();
-    [[nodiscard]] const std::vector<uint8_t>& getReadBuffer() const {return read_buf;}
+    void receiveByte();
+    void clearBuffer();
+
+    const std::vector<uint8_t>& getReadBuffer() const {return read_buf;}
+
 };

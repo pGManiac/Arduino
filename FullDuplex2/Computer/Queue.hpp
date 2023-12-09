@@ -117,16 +117,15 @@ public:
     }
 
 
-    void receive(const SerialPort& _serialPort) {
-        if (_serialPort.getReadBuffer().size() >= 8) {
+    void receive() {
+        if (serialPort.getReadBuffer().size() >= 8) {
             uint8_t receivedBytes[8];
-            for (uint8_t i = 0; i < 8; ++i) {
-                receivedBytes[i] = _serialPort.getReadBuffer().at(i);
+            for (uint8_t i = 0; i < 8; i++) {
+                receivedBytes[i] = serialPort.getReadBuffer().at(i);
             }
-            //delete bytes from buffer?
+            serialPort.clearBuffer();
             Frame newFrame = Frame(receivedBytes);
-            Queue newQueue = Queue();
-            newQueue.enqueue(&newFrame);
+            receivedQueue.enqueue(&newFrame);
         }
     }
 };
