@@ -62,6 +62,8 @@ Frame::Frame(bool acknowledge) {
      *
      * This function calculates the hardware bytes to be sent based on the current frame state,
      * data, and checksum. The resulting hardware bytes are stored in the hardWareBytes array.
+     * It uses a number of different bit operations: extracting bits to be sent, shifting them
+     * to the least significant position and combining them with clock and frame bit to a byte.
      */
 void Frame::calcBytesToBeSent() {
     //highest significant bits first
@@ -106,6 +108,9 @@ void Frame::calcBytesToBeSent() {
      * @brief Reconstruct data, checksum, and frame state from the hardware byte array.
      *
      * This function reconstructs data, checksum, and frame state from the provided hardware byte array.
+     * It uses a number of different bit operations: extracting the least significant bits, shifting
+     * them to their respective position in the final byte and setting them in data or checksum, while
+     * leaving the previously set bits untouched.
      */
 void Frame::calcData() {
     //reconstruct data, checksum and frameState from byteArray

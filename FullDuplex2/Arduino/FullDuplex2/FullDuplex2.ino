@@ -38,20 +38,10 @@ struct ToBeSentToPC {
         if (head == nullptr) {
             tail = nullptr; // The queue is now empty
         }
-    } else {
-        Serial.println("Error: Queue is empty. Cannot dequeue.");
     }
 }
 
 };
-
-void transmitToPC() {
-  if (sendToPCQueue.head == nullptr) {
-
-  } else {
-    sendToPCQueue.dequeue();
-  }
-}
 
 void sendToArduino() {
   if (numberCollectedBytes < 8) {
@@ -85,7 +75,7 @@ void setup() {
 void loop() {
   if (Serial.available() > 0) {
     sendToArduino();
-    transmitToPC();
+    sendToPCQueue.dequeue();
   }
   // Add other logic here if needed
 }
