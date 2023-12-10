@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/klames/CPPProjects/Arduino/FullDuplex2/Computer/cmake-build-debug"
+			"value" : "/home/myoshka/Documents/HWP/Arduino/FullDuplex2/Computer/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -79,7 +79,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "27"
+			"value" : "26"
 		},
 		{
 			"name" : "CMAKE_CACHE_PATCH_VERSION",
@@ -91,7 +91,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "0"
+			"value" : "4"
 		},
 		{
 			"name" : "CMAKE_CODEBLOCKS_COMPILER_ID",
@@ -627,7 +627,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/klames/CPPProjects/Arduino/FullDuplex2/Computer/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "/home/myoshka/Documents/HWP/Arduino/FullDuplex2/Computer/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -687,7 +687,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/klames/CPPProjects/Arduino/FullDuplex2/Computer"
+			"value" : "/home/myoshka/Documents/HWP/Arduino/FullDuplex2/Computer"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -975,7 +975,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/opt/clion/bin/cmake/linux/x64/share/cmake-3.27"
+			"value" : "/opt/clion/bin/cmake/linux/x64/share/cmake-3.26"
 		},
 		{
 			"name" : "CMAKE_SHARED_LINKER_FLAGS",
@@ -1186,22 +1186,6 @@
 			"value" : "/usr/bin/strip"
 		},
 		{
-			"name" : "CMAKE_TAPI",
-			"properties" : 
-			[
-				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
-					"name" : "HELPSTRING",
-					"value" : "Path to a program."
-				}
-			],
-			"type" : "FILEPATH",
-			"value" : "CMAKE_TAPI-NOTFOUND"
-		},
-		{
 			"name" : "CMAKE_UNAME",
 			"properties" : 
 			[
@@ -1239,7 +1223,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/klames/CPPProjects/Arduino/FullDuplex2/Computer/cmake-build-debug"
+			"value" : "/home/myoshka/Documents/HWP/Arduino/FullDuplex2/Computer/cmake-build-debug"
 		},
 		{
 			"name" : "Computer_IS_TOP_LEVEL",
@@ -1263,7 +1247,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/klames/CPPProjects/Arduino/FullDuplex2/Computer"
+			"value" : "/home/myoshka/Documents/HWP/Arduino/FullDuplex2/Computer"
 		},
 		{
 			"name" : "ProcessorCount_cmd_nproc",

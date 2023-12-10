@@ -1,5 +1,6 @@
 volatile uint8_t numberCollectedBytes = 0;
 volatile uint8_t bytesToSend[8];
+volatile ToBeSentToPC sendToPCQueue = ToBeSentToPC();
 
 
 struct Node {
@@ -44,7 +45,15 @@ struct ToBeSentToPC {
 
 };
 
-void sendData() {
+void transmitToPC() {
+  if (sendToPCQueue.head == nullptr) {
+
+  } else {
+    sendToPCQueue.dequeue();
+  }
+}
+
+void sendToArduino() {
   if (numberCollectedBytes < 8) {
     uint8_t receivedData = Serial.read();
     bytesToSend[numberCollectedBytes] = receivedData;
@@ -58,6 +67,10 @@ void sendData() {
   }
 }
 
+ISR(PCINT0_vect) {
+  sendToPCQueue.enqueue(PINB);
+}
+
 void setup() {
   Serial.begin(9600);  // Use the same baud rate as in your C code
   //set PORTC for output and PORTB for input
@@ -65,13 +78,14 @@ void setup() {
   DDRB = 0x00;
   PORTB = 0x00;
   //enable PCINT for PB0-PB3
-  PCICR = 0x0F;
+  PCICR = 0x0F; //PIN Change nur auf Takt: 0x04
   PCMSK0 = 0x0F;
 }
 
 void loop() {
   if (Serial.available() > 0) {
-    sendData();
+    sendToArduino();
+    transmitToPC();
   }
   // Add other logic here if needed
 }
