@@ -83,9 +83,10 @@ struct Queue {
 
 
 struct SendingQueue : public Queue {
-    bool acknowledgementReceived;
+    bool readyToSend;
+    bool sentACK;
 
-    SendingQueue() : acknowledgementReceived(false) {}
+    SendingQueue() : readyToSend(true), sentACK(false){}
 };
 
 struct ReceivedQueue : public Queue {
@@ -106,14 +107,24 @@ public:
     }
 
     void send() {
-        if (!sendingQueue.acknowledgementReceived) {
-            // Do something when acknowledgement is not received
+        if (!sendingQueue.readyToSend) {
+
         } else {
             if (sendingQueue.head != nullptr) {
                 serialPort.sendBytes(sendingQueue.head->frame->hardWareBytes,
                                      sizeof(sendingQueue.head->frame->hardWareBytes));
-                sendingQueue.acknowledgementReceived = false;
+                sendingQueue.readyToSend = false;
+                removeIfACK();
             }
+        }
+    }
+
+    void removeIfACK() {
+        if(sendingQueue.head->frame->frameState == 1) {
+            sendingQueue.dequeue();
+            sendingQueue.sentACK = true;
+        } else {
+            sendingQueue.sentACK = false;
         }
     }
 
@@ -133,7 +144,7 @@ public:
     void processReceive() {
         Frame* frame;
         switch(receivedQueue.head->frame->frameState) {
-            case 0:
+            case 0: //data
                 // Send to file (still to be implemented)
                 frame = new Frame(true);
                 sendingQueue.enqueueAtFront(frame);
@@ -141,15 +152,20 @@ public:
                 receivedQueue.dequeue();
                 break;
 
-            case 1:
+            case 1: //ACK
                 sendingQueue.dequeue();
-                sendingQueue.acknowledgementReceived = true;
+                sendingQueue.readyToSend = true;
                 break;
 
-            case 2:
-                sendingQueue.acknowledgementReceived = true;
+            case 2: //Error
+                if(sendingQueue.sentACK) {
+                    frame = new Frame(true);
+                    sendingQueue.enqueueAtFront(frame);
+                }
+                sendingQueue.readyToSend = true;
                 send();
-            case 3:
+
+            case 3: //Fail
                 frame = new Frame(false);
                 sendingQueue.enqueueAtFront(frame);
         }
