@@ -49,6 +49,20 @@ struct Frame {
         calcData();
     }
 
+    Frame(bool acknowledge) {
+        if(acknowledge) {
+            data = 0b10011001;
+            checksum = data ^ xorChecksum;
+            frameState = 1;
+            calcBytesToBeSent();
+        } else if(!acknowledge) {
+            data = 0b01100110;
+            checksum = data ^ xorChecksum;
+            frameState = 2;
+            calcBytesToBeSent();
+        }
+    }
+
     /**
  * @brief Calculate the hardware bytes to be sent based on the current frame state.
  *

@@ -129,4 +129,30 @@ public:
             receivedQueue.enqueue(&newFrame);
         }
     }
+
+    void processReceive() {
+        Frame* frame;
+        switch(receivedQueue.head->frame->frameState) {
+            case 0:
+                // Send to file (still to be implemented)
+                frame = new Frame(true);
+                sendingQueue.enqueueAtFront(frame);
+
+                receivedQueue.dequeue();
+                break;
+
+            case 1:
+                sendingQueue.dequeue();
+                sendingQueue.acknowledgementReceived = true;
+                break;
+
+            case 2:
+                sendingQueue.acknowledgementReceived = true;
+                send();
+            case 3:
+                frame = new Frame(false);
+                sendingQueue.enqueueAtFront(frame);
+        }
+    }
+
 };
