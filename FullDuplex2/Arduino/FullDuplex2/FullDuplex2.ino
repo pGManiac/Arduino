@@ -1,4 +1,5 @@
-const int testPin = 12;  // Assuming the LED is connected to digital pin 12
+volatile uint8_t numberCollectedBytes = 0;
+volatile uint8_t bytesToSend[8];
 
 
 struct Node {
@@ -12,7 +13,7 @@ struct ToBeSentToPC {
   Node* head;
   Node* tail;
 
-  ToBeSentToPC() : head(nullptr), tail(nullptr) {}
+  ToBeSentToPC() : head(nullptr), tail(nullptr) {pinMode(testPin, OUTPUT);}
 
   void enqueue(uint8_t receivedByte) {
     Node* newNode = new Node{receivedByte, nullptr};
@@ -44,40 +45,38 @@ struct ToBeSentToPC {
 
 };
 
+void sendData() {
+  if (numberCollectedBytes < 8) {
+    uint8_t receivedData = Serial.read();
+    bytesToSend[numberCollectedBytes] = receivedData;
+    numberCollectedBytes++;
+  } else {
+    numberCollectedBytes = 0;
+    for (uint8_t i = 0; i < 8; i++) {
+      PORTC = bytesToSend[i];
+      delay(50); //testen, welcher delay passt
+    }
+  }
+}
 
 
-  void
-  setup() {
-  pinMode(testPin, OUTPUT);
+
+void setup() {
   Serial.begin(9600);  // Use the same baud rate as in your C code
+  //set PORTC for output and PORTB for input
+  DDRC = 0x0F;
+  DDRB = 0x00;
+  PORTB = 0x00;
+  //enable PCINT for PB0-PB3
+  PCICR = 0x0F;
+  PCMSK0 = 0x0F;
+
+  
 }
 
 void loop() {
   if (Serial.available() > 0) {
-    // Read a byte from the serial port
-    uint8_t receivedData = Serial.read();
-
-    // Check if the received data is equal to 1
-    if (receivedData == 254) {
-
-      // Execute code only when the received data is 1
-      digitalWrite(testPin, HIGH);
-      delay(50);
-      digitalWrite(testPin, LOW);
-      delay(50);
-      digitalWrite(testPin, HIGH);
-      delay(50);
-      digitalWrite(testPin, LOW);
-      delay(50);
-      digitalWrite(testPin, HIGH);
-      delay(50);
-      digitalWrite(testPin, LOW);
-      delay(50);
-      digitalWrite(testPin, HIGH);
-      delay(50);
-      digitalWrite(testPin, LOW);
-      delay(50);
-    }
+    sendData();
   }
   // Add other logic here if needed
 }
