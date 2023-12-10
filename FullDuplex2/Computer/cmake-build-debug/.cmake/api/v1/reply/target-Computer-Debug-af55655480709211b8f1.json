@@ -50,7 +50,9 @@
 			"sourceIndexes" : 
 			[
 				0,
-				4
+				4,
+				5,
+				6
 			]
 		}
 	],
@@ -84,7 +86,9 @@
 			"sourceIndexes" : 
 			[
 				0,
-				4
+				4,
+				5,
+				6
 			]
 		},
 		{
@@ -124,6 +128,18 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "SerialPort.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Frame.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Queue.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

@@ -9,4 +9,6 @@ add_executable(Computer
         Queue.hpp
         SerialPort.hpp
         SerialPort.cpp
+        Frame.cpp
+        Queue.cpp
 )

@@ -6,6 +6,8 @@
 #include "Frame.hpp"
 #include "SerialPort.hpp"
 
+const char* portName = "/dev/ttyUSB0";
+
 /**
  * @brief Represents a node in a linked list with Frame data.
  *
@@ -30,58 +32,21 @@ struct Queue {
     Node* head; /**< Pointer to the first node in the queue. */
     Node* tail; /**< Pointer to the last node in the queue. */
 
-    /**
-     * @brief Default constructor.
-     *
-     * Initializes both head and tail pointers to nullptr.
-     */
-    Queue() : head(nullptr), tail(nullptr) {}
+    Queue();
 
+    void enqueue(Frame*);
 
-    /**
-     * @brief Enqueues a Frame at the back of the queue.
-     *
-     * Creates a new node with the provided Frame and adds it to the back
-     * of the queue.
-     *
-     * @param frame The Frame to be enqueued.
-     */
-    void enqueue(Frame* framePtr) {
-        Node* newNode = new Node{framePtr, nullptr};
-        if (tail == nullptr) {
-            head = tail = newNode;
-        } else {
-            tail->next = newNode;
-            tail = newNode;
-        }
-    }
+    void enqueueAtFront(Frame*);
 
-    void enqueueAtFront(Frame* framePtr) {
-        Node* newNode = new Node(framePtr,nullptr);
-
-        if(head == nullptr) {
-            head = tail = newNode;
-        } else {
-            newNode->next = head;
-            head = newNode;
-        }
-    }
-
-    void dequeue() {
-        if (head != nullptr) {
-            Node* temp = head;
-            head = head->next;
-            delete temp;
-
-            // If the queue becomes empty, update the tail pointer as well
-            if (head == nullptr) {
-                tail = nullptr;
-            }
-        }
-    }
+    void dequeue();
 };
 
-
+/**
+ * @brief Represents a sending queue with additional attributes.
+ *
+ * The SendingQueue struct extends the Queue and includes additional attributes
+ * related to the sending process.
+ */
 struct SendingQueue : public Queue {
     bool readyToSend;
     bool sentACK;
@@ -89,12 +54,21 @@ struct SendingQueue : public Queue {
     SendingQueue() : readyToSend(true), sentACK(false){}
 };
 
+/**
+ * @brief Represents a received queue.
+ *
+ * The ReceivedQueue struct extends the Queue and is specialized for received frames.
+ */
 struct ReceivedQueue : public Queue {
 
 };
 
-const char* portName = "/dev/ttyUSB0";
-
+/**
+ * @brief Represents a set of queues and a SerialPort for communication.
+ *
+ * The Queues class encapsulates SendingQueue, ReceivedQueue, and SerialPort,
+ * providing methods for sending, receiving, and processing frames.
+ */
 class Queues {
 private:
     SendingQueue sendingQueue;
@@ -102,73 +76,13 @@ private:
     SerialPort serialPort;
 
 public:
-    Queues() : serialPort(portName) {
-        serialPort.configure();
-    }
+    Queues();
 
-    void send() {
-        if (!sendingQueue.readyToSend) {
+    void send();
 
-        } else {
-            if (sendingQueue.head != nullptr) {
-                serialPort.sendBytes(sendingQueue.head->frame->hardWareBytes,
-                                     sizeof(sendingQueue.head->frame->hardWareBytes));
-                sendingQueue.readyToSend = false;
-                removeIfACK();
-            }
-        }
-    }
+    void removeIfACK();
 
-    void removeIfACK() {
-        if(sendingQueue.head->frame->frameState == 1) {
-            sendingQueue.dequeue();
-            sendingQueue.sentACK = true;
-        } else {
-            sendingQueue.sentACK = false;
-        }
-    }
+    void receive();
 
-
-    void receive() {
-        if (serialPort.getReadBuffer().size() >= 8) {
-            uint8_t receivedBytes[8];
-            for (uint8_t i = 0; i < 8; i++) {
-                receivedBytes[i] = serialPort.getReadBuffer().at(i);
-            }
-            serialPort.clearBuffer();
-            Frame newFrame = Frame(receivedBytes);
-            receivedQueue.enqueue(&newFrame);
-        }
-    }
-
-    void processReceive() {
-        Frame* frame;
-        switch(receivedQueue.head->frame->frameState) {
-            case 0: //data
-                // Send to file (still to be implemented)
-                frame = new Frame(true);
-                sendingQueue.enqueueAtFront(frame);
-
-                receivedQueue.dequeue();
-                break;
-
-            case 1: //ACK
-                sendingQueue.dequeue();
-                sendingQueue.readyToSend = true;
-                break;
-
-            case 2: //Error
-                if(sendingQueue.sentACK) {
-                    frame = new Frame(true);
-                    sendingQueue.enqueueAtFront(frame);
-                }
-                sendingQueue.readyToSend = true;
-                send();
-
-            case 3: //Fail
-                frame = new Frame(false);
-                sendingQueue.enqueueAtFront(frame);
-        }
-    }
-
+    void processReceive();
 };
