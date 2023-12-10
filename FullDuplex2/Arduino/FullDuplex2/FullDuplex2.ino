@@ -39,7 +39,6 @@ struct ToBeSentToPC {
         }
     } else {
         Serial.println("Error: Queue is empty. Cannot dequeue.");
-        // Handle the error if needed
     }
 }
 
@@ -59,8 +58,6 @@ void sendData() {
   }
 }
 
-
-
 void setup() {
   Serial.begin(9600);  // Use the same baud rate as in your C code
   //set PORTC for output and PORTB for input
@@ -70,8 +67,6 @@ void setup() {
   //enable PCINT for PB0-PB3
   PCICR = 0x0F;
   PCMSK0 = 0x0F;
-
-  
 }
 
 void loop() {
