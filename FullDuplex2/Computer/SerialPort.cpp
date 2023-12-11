@@ -1,4 +1,6 @@
 #include "SerialPort.hpp"
+#include "Queue.hpp"
+#include "Frame.hpp"
 
 SerialPort::SerialPort(const char* portName) {
     // Open the serial port
@@ -62,18 +64,40 @@ void SerialPort::sendBytes(const uint8_t* data , size_t size) {
 
 
 void SerialPort::receiveByte() {
-    int bytesAvailable;
+    FD_ZERO(&readSet);
+    FD_SET(fd, &readSet);
+    struct timeval timeout;
+    timeout.tv_sec = 5; // 5 millisecs and...
+    timeout.tv_usec = 0; // 0 microsecs
+    //maybe put these first few lines somewhere more global...?
+    int bytesAvailable = select(fd +1, &readSet, nullptr, nullptr, &timeout);
+    /*
     if (ioctl(fd, FIONREAD, &bytesAvailable) == -1) {
         std::cerr << "Error checking bytes available in serial port.\n";
         return;
-    }
+    }*/
 
-    if(bytesAvailable>= 1) {
+    if (bytesAvailable == -1) {
+        std::cerr << "error in select\n";
+        return;
+    } else if (bytesAvailable == 0) {
+        if (bytesCounted >= 8) {
+            bytesCounted = 0;
+            std::cerr << "timeout, eight bytes were read\n";
+        } else {
+            //create and queue error frame, requesting resend
+            clearBuffer();
+            Frame errorFrame = Frame(false);
+            //enqueue errorFrame
+            std::cerr << "timeout, not enough bytes were read\n";
+        }
+    } else {
         ssize_t bytesRead = read(fd, &buffByte, 1);
         if(bytesRead == -1) {
             std::cerr << "Error reading from serial port.\n";
         } else {
             this->read_buf.push_back(buffByte);
+            bytesCounted++;
         }
     }
 }

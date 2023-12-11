@@ -15,6 +15,8 @@ private:
     int fd;  // File descriptor for the serial port
     std::vector<uint8_t> read_buf;
     uint8_t buffByte;
+    fd_set readSet;
+    uint8_t bytesCounted = 0;
 
 public:
     SerialPort(const char* portName);
