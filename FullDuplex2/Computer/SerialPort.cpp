@@ -62,33 +62,35 @@ void SerialPort::sendBytes(const uint8_t* data , size_t size) {
     }
 }
 
-
-void SerialPort::receiveByte() {
+int SerialPort::startTimeout() {
     FD_ZERO(&readSet);
     FD_SET(fd, &readSet);
     struct timeval timeout;
     timeout.tv_sec = 5; // 5 millisecs and...
     timeout.tv_usec = 0; // 0 microsecs
-    //maybe put these first few lines somewhere more global...?
-    int bytesAvailable = select(fd +1, &readSet, nullptr, nullptr, &timeout);
+    return  select(fd +1, &readSet, nullptr, nullptr, &timeout);;
+}
+
+
+void SerialPort::receiveByte() {
     /*
     if (ioctl(fd, FIONREAD, &bytesAvailable) == -1) {
         std::cerr << "Error checking bytes available in serial port.\n";
         return;
     }*/
 
+    int bytesAvailable = startTimeout();
+
     if (bytesAvailable == -1) {
         std::cerr << "error in select\n";
         return;
     } else if (bytesAvailable == 0) {
-        if (bytesCounted >= 8) {
-            bytesCounted = 0;
+        if (this->read_buf.size() >= 8) {
             std::cerr << "timeout, eight bytes were read\n";
         } else {
-            //create and queue error frame, requesting resend
-            clearBuffer();
-            Frame errorFrame = Frame(false);
-            //enqueue errorFrame
+            for (uint8_t i = 0; i < (8 - this->read_buf.size()); i++) {
+                this->read_buf.push_back(0x00);
+            }
             std::cerr << "timeout, not enough bytes were read\n";
         }
     } else {
@@ -97,7 +99,6 @@ void SerialPort::receiveByte() {
             std::cerr << "Error reading from serial port.\n";
         } else {
             this->read_buf.push_back(buffByte);
-            bytesCounted++;
         }
     }
 }

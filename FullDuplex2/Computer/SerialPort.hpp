@@ -16,7 +16,6 @@ private:
     std::vector<uint8_t> read_buf;
     uint8_t buffByte;
     fd_set readSet;
-    uint8_t bytesCounted = 0;
 
 public:
     SerialPort(const char* portName);
@@ -29,4 +28,5 @@ public:
 
     const std::vector<uint8_t>& getReadBuffer() const {return read_buf;}
 
+    int startTimeout();
 };
