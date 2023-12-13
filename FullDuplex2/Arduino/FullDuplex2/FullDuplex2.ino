@@ -1,8 +1,3 @@
-volatile uint8_t numberCollectedBytes = 0;
-volatile uint8_t bytesToSend[8];
-volatile ToBeSentToPC sendToPCQueue = ToBeSentToPC();
-
-
 struct Node {
   uint8_t byte;
   Node* next;
@@ -14,36 +9,42 @@ struct ToBeSentToPC {
   Node* head;
   Node* tail;
 
-  ToBeSentToPC() : head(nullptr), tail(nullptr) {pinMode(testPin, OUTPUT);}
+  ToBeSentToPC() : head(nullptr), tail(nullptr) {
+    
+  }
 
   void enqueue(uint8_t receivedByte) {
     Node* newNode = new Node{receivedByte, nullptr};
-        if (tail == nullptr) {
-            head = tail = newNode;
-        } else {
-            tail->next = newNode;
-            tail = newNode;
-        }
+    if (tail == nullptr) {
+      head = tail = newNode;
+    } else {
+      tail->next = newNode;
+      tail = newNode;
+    }
   }
 
   void dequeue() {
     if (head != nullptr) {
-        Serial.write(head->byte);
+      Serial.write(head->byte);
 
-        Node* temp = head;
-        head = head->next;
+      Node* temp = head;
+      head = head->next;
 
-        delete temp;
+      delete temp;
 
-        if (head == nullptr) {
-            tail = nullptr; // The queue is now empty
-        }
+      if (head == nullptr) {
+        tail = nullptr; // The queue is now empty
+      }
     }
-}
-
+  }
 };
 
+volatile ToBeSentToPC sendToPCQueue;
+
 void sendToArduino() {
+  static uint8_t numberCollectedBytes = 0;
+  static uint8_t bytesToSend[8];
+
   if (numberCollectedBytes < 8) {
     uint8_t receivedData = Serial.read();
     bytesToSend[numberCollectedBytes] = receivedData;
@@ -52,7 +53,7 @@ void sendToArduino() {
     numberCollectedBytes = 0;
     for (uint8_t i = 0; i < 8; i++) {
       PORTC = bytesToSend[i];
-      delay(50); //testen, welcher delay passt
+      delay(50); // Adjust delay as needed
     }
   }
 }
@@ -62,13 +63,11 @@ ISR(PCINT0_vect) {
 }
 
 void setup() {
-  Serial.begin(9600);  // Use the same baud rate as in your C code
-  //set PORTC for output and PORTB for input
+  Serial.begin(9600);
   DDRC = 0x0F;
   DDRB = 0x00;
   PORTB = 0x00;
-  //enable PCINT for PB0-PB3
-  PCICR = 0x0F; //PIN Change nur auf Takt: 0x04
+  PCICR = 0x0F;
   PCMSK0 = 0x0F;
 }
 
