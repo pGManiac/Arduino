@@ -85,4 +85,6 @@ public:
     void receive();
 
     void processReceive();
+
+    void sendByte(uint8_t);
 };

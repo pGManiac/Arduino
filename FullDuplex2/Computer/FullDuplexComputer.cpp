@@ -8,19 +8,23 @@
 
 int main() {
     const char* portName = "/dev/ttyUSB0";
+    uint8_t number;
 
     SerialPort serial(portName);
-
-    // Configure the serial port
     serial.configure();
     usleep(5000000);
 
-    // Test sending data to Arduino
-    const uint8_t sendData = 0xFF;
-    serial.sendBytes(&sendData, sizeof(sendData));
+    Queues queues;
 
-    // Wait for a moment to ensure Arduino has processed the data
-    usleep(1000000);  // Sleep for 1 second
+    std::cout << "Enter a number to be sent\n";
+    std::cin >> number;
 
-    return 0;
+    queues.sendByte(number);
+
+    while(true) {
+        queues.send();
+        queues.receive();
+        queues.processReceive();
+
+    }
 }

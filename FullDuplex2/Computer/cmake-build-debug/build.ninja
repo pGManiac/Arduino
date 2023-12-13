@@ -65,6 +65,22 @@ build CMakeFiles/Computer.dir/SerialPort.cpp.o: CXX_COMPILER__Computer_unscanned
   TARGET_COMPILE_PDB = CMakeFiles/Computer.dir/
   TARGET_PDB = Computer.pdb
 
+build CMakeFiles/Computer.dir/Frame.cpp.o: CXX_COMPILER__Computer_unscanned_Debug /home/klames/Arduino/FullDuplex2/Computer/Frame.cpp || cmake_object_order_depends_target_Computer
+  DEP_FILE = CMakeFiles/Computer.dir/Frame.cpp.o.d
+  FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/Computer.dir
+  OBJECT_FILE_DIR = CMakeFiles/Computer.dir
+  TARGET_COMPILE_PDB = CMakeFiles/Computer.dir/
+  TARGET_PDB = Computer.pdb
+
+build CMakeFiles/Computer.dir/Queue.cpp.o: CXX_COMPILER__Computer_unscanned_Debug /home/klames/Arduino/FullDuplex2/Computer/Queue.cpp || cmake_object_order_depends_target_Computer
+  DEP_FILE = CMakeFiles/Computer.dir/Queue.cpp.o.d
+  FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/Computer.dir
+  OBJECT_FILE_DIR = CMakeFiles/Computer.dir
+  TARGET_COMPILE_PDB = CMakeFiles/Computer.dir/
+  TARGET_PDB = Computer.pdb
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Computer
@@ -73,7 +89,7 @@ build CMakeFiles/Computer.dir/SerialPort.cpp.o: CXX_COMPILER__Computer_unscanned
 #############################################
 # Link the executable Computer
 
-build Computer: CXX_EXECUTABLE_LINKER__Computer_Debug CMakeFiles/Computer.dir/FullDuplexComputer.cpp.o CMakeFiles/Computer.dir/SerialPort.cpp.o
+build Computer: CXX_EXECUTABLE_LINKER__Computer_Debug CMakeFiles/Computer.dir/FullDuplexComputer.cpp.o CMakeFiles/Computer.dir/SerialPort.cpp.o CMakeFiles/Computer.dir/Frame.cpp.o CMakeFiles/Computer.dir/Queue.cpp.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/Computer.dir
   POST_BUILD = :

@@ -23,6 +23,7 @@ void Queue::enqueue(Frame* framePtr) {
         tail->next = newNode;
         tail = newNode;
     }
+    std::cout << framePtr->data;
 }
 
 /**
@@ -156,4 +157,9 @@ void Queues::processReceive() {
             frame = new Frame(false);
             sendingQueue.enqueueAtFront(frame);
     }
+}
+
+void Queues::sendByte(uint8_t number) {
+    Frame* frame = new Frame(number);
+    sendingQueue.enqueue(frame);
 }

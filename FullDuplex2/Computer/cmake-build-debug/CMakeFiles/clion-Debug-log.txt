@@ -1,4 +1,4 @@
-/opt/clion/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -S /home/myoshka/Documents/HWP/Arduino/FullDuplex2/Computer -B /home/myoshka/Documents/HWP/Arduino/FullDuplex2/Computer/cmake-build-debug
+/opt/clion/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/opt/clion/bin/ninja/linux/x64/ninja -G Ninja -S /home/klames/Arduino/FullDuplex2/Computer -B /home/klames/Arduino/FullDuplex2/Computer/cmake-build-debug
 -- The C compiler identification is GNU 13.2.1
 -- The CXX compiler identification is GNU 13.2.1
 -- Detecting C compiler ABI info
@@ -11,6 +11,6 @@
 -- Check for working CXX compiler: /usr/bin/c++ - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Configuring done (0.3s)
+-- Configuring done (0.8s)
 -- Generating done (0.0s)
--- Build files have been written to: /home/myoshka/Documents/HWP/Arduino/FullDuplex2/Computer/cmake-build-debug
+-- Build files have been written to: /home/klames/Arduino/FullDuplex2/Computer/cmake-build-debug
