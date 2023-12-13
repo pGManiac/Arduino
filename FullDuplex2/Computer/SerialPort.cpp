@@ -72,14 +72,13 @@ void SerialPort::receive8Bytes() {
             break;
         default:
             if(bytesAvailable >= 8) {
-                    read(fd, &buffByte, 8);
+                read(fd, &buffByte, 8);
                 bytesAvailable = 0;
                 bytesAvailableLast = 0;
                 break;
             } else if (bytesAvailable > bytesAvailableLast){
                 bytesAvailableLast = bytesAvailable;
                 receive8Bytes();
-
             } else {
                 for (uint8_t & i : buffByte) {
                     i = 0;

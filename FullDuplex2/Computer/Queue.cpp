@@ -107,23 +107,14 @@ void Queues::removeIfACK() {
     }
 }
 
-
-void Queues::receiveByte() {
-    serialPort.receiveByte();
-}
 /**
      * @brief Receives frame from the serial port and enqueues it in the received queue.
      */
 void Queues::receive() {
-    if (serialPort.getReadBuffer().size() >= 8) {
-        uint8_t receivedBytes[8];
-        for (uint8_t i = 0; i < 8; i++) {
-            receivedBytes[i] = serialPort.getReadBuffer().at(i);
-        }
+        serialPort.receive8Bytes();
+        Frame* newFrame = new Frame(serialPort.getReadBuffer());
         serialPort.clearBuffer();
-        Frame* newFrame = new Frame(receivedBytes);  // Dynamically allocate Frame object
         receivedQueue.enqueue(newFrame);  // Enqueue the pointer
-    }
 }
 
 /**
@@ -133,12 +124,14 @@ void Queues::receive() {
      * different actions, such as sending frames, dequeuing frames, and initiating
      * the sending process.
      */
-void Queues::processReceive() {
+void Queues::processReceive(std::ofstream& of) {
     Frame* frame;
     if(receivedQueue.head != nullptr) {
         switch(receivedQueue.head->frame->frameState) {
             case 0: //data
-                // Send to file (still to be implemented)
+                // Send to file
+                std::cout << receivedQueue.head->frame->data; //print on terminal for test
+                of.write(reinterpret_cast<const char*>(receivedQueue.head->frame->data), sizeof(uint8_t));
                 frame = new Frame(true);
                 sendingQueue.enqueueAtFront(frame);
 

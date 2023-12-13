@@ -28,7 +28,7 @@ public:
     void clearBuffer();
     void receive8Bytes();
 
-    const std::vector<uint8_t>& getReadBuffer() const {return read_buf;}
+    const uint8_t* getReadBuffer() const {return buffByte;}
 
     int startTimeout();
 };

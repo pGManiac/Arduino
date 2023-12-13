@@ -82,11 +82,9 @@ public:
 
     void removeIfACK();
 
-    void receiveByte();
-
     void receive();
 
-    void processReceive();
+    void processReceive(std::ofstream& of);
 
     void sendByte(uint8_t);
 };
