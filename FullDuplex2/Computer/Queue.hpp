@@ -6,7 +6,7 @@
 #include "Frame.hpp"
 #include "SerialPort.hpp"
 
-const char* portName = "/dev/ttyUSB0";
+
 
 /**
  * @brief Represents a node in a linked list with Frame data.
@@ -76,7 +76,7 @@ private:
     SerialPort serialPort;
 
 public:
-    Queues();
+    Queues(const char*);
 
     void send();
 
@@ -87,4 +87,6 @@ public:
     void processReceive();
 
     void sendByte(uint8_t);
+
+    void configureSerialPort();
 };

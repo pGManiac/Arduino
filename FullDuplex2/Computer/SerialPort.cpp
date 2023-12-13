@@ -2,9 +2,9 @@
 #include "Queue.hpp"
 #include "Frame.hpp"
 
-SerialPort::SerialPort(const char* portName) {
+SerialPort::SerialPort(const char* _portName) {
     // Open the serial port
-    fd = open(portName, O_RDWR | O_NOCTTY | O_NDELAY);
+    fd = open(_portName, O_RDWR | O_NOCTTY | O_NDELAY);
     if (fd == -1) {
         std::cerr << "Error opening serial port." << std::endl;
         // Handle the error

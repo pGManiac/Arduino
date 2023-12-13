@@ -69,7 +69,7 @@ void Queue::dequeue() {
      *
      * Initializes the serial port with the specified port name and configures it.
      */
-Queues::Queues() : serialPort(portName) {
+Queues::Queues(const char* _portName) : serialPort(_portName) {
     serialPort.configure();
 }
 
@@ -162,4 +162,8 @@ void Queues::processReceive() {
 void Queues::sendByte(uint8_t number) {
     Frame* frame = new Frame(number);
     sendingQueue.enqueue(frame);
+}
+
+void Queues::configureSerialPort() {
+    serialPort.configure();
 }

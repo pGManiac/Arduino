@@ -18,7 +18,7 @@ private:
     fd_set readSet;
 
 public:
-    SerialPort(const char* portName);
+    SerialPort(const char*);
     ~SerialPort();
 
     void configure();

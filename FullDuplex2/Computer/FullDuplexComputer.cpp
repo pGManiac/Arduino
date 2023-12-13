@@ -1,21 +1,19 @@
 #include <iostream>
 
 #include "Queue.hpp"
-
-
-
 #include "SerialPort.hpp"
 
+const char* portName = "/dev/ttyUSB0";
+
 int main() {
-    const char* portName = "/dev/ttyUSB0";
     uint8_t number;
 
-    SerialPort serial(portName);
-    serial.configure();
+
+
+    Queues queues(portName);
+    queues.configureSerialPort();
+
     usleep(5000000);
-
-    Queues queues;
-
     std::cout << "Enter a number to be sent\n";
     std::cin >> number;
 
@@ -25,6 +23,5 @@ int main() {
         queues.send();
         queues.receive();
         queues.processReceive();
-
     }
 }
