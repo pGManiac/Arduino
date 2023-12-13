@@ -62,44 +62,6 @@ void SerialPort::sendBytes(const uint8_t* data , size_t size) {
     }
 }
 
-int SerialPort::startTimeout() {
-    FD_ZERO(&readSet);
-    FD_SET(fd, &readSet);
-    struct timeval timeout;
-    timeout.tv_sec = 5; // 5 millisecs and...
-    timeout.tv_usec = 0; // 0 microsecs
-    return  select(fd +1, &readSet, nullptr, nullptr, &timeout);;
-}
-
-
-void SerialPort::receiveByte() {
-    /*
-    */
-
-    int bytesAvailable = startTimeout();
-
-    if (bytesAvailable == -1) {
-        std::cerr << "error in select\n";
-        return;
-    } else if (bytesAvailable == 0) {
-        if (this->read_buf.size() >= 8) {
-            std::cerr << "timeout, eight bytes were read\n";
-        } else {
-            for (uint8_t i = 0; i < (8 - this->read_buf.size()); i++) {
-                this->read_buf.push_back(0x00);
-            }
-            std::cerr << "timeout, not enough bytes were read\n";
-        }
-    } else {
-        ssize_t bytesRead = read(fd, &buffByte, 1);
-        if(bytesRead == -1) {
-            std::cerr << "Error reading from serial port.\n";
-        } else {
-            this->read_buf.push_back(buffByte);
-        }
-    }
-}
-
 void SerialPort::receive8Bytes() {
     bytesAvailable = ioctl(fd, FIONREAD, &bytesAvailable);
     switch(bytesAvailable) {
