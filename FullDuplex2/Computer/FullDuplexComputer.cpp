@@ -11,17 +11,27 @@ int main() {
 
 
     Queues queues(portName);
-    queues.configureSerialPort();
 
     usleep(5000000);
     std::cout << "Enter a number to be sent\n";
     std::cin >> number;
 
     queues.sendByte(number);
+    std::cout << "Sent number" << number << "\n";
 
     while(true) {
         queues.send();
         queues.receive();
+
+        queues.receiveByte();
+        queues.receiveByte();
+        queues.receiveByte();
+        queues.receiveByte();
+        queues.receiveByte();
+        queues.receiveByte();
+        queues.receiveByte();
+        queues.receiveByte();
+
         queues.processReceive();
     }
 }

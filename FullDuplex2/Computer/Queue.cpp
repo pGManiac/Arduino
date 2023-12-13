@@ -16,7 +16,7 @@ Queue::Queue() : head(nullptr), tail(nullptr) {}
      * @param framePtr The Frame to be enqueued.
      */
 void Queue::enqueue(Frame* framePtr) {
-    Node* newNode = new Node{framePtr, nullptr};
+    Node* newNode = new Node(framePtr, nullptr);
     if (tail == nullptr) {
         head = tail = newNode;
     } else {
@@ -99,7 +99,7 @@ void Queues::send() {
      * Sets the sentACK flag accordingly.
      */
 void Queues::removeIfACK() {
-    if(sendingQueue.head->frame->frameState == 1) {
+    if (sendingQueue.head != nullptr && sendingQueue.head->frame->frameState == 1) {
         sendingQueue.dequeue();
         sendingQueue.sentACK = true;
     } else {
@@ -107,6 +107,10 @@ void Queues::removeIfACK() {
     }
 }
 
+
+void Queues::receiveByte() {
+    serialPort.receiveByte();
+}
 /**
      * @brief Receives frame from the serial port and enqueues it in the received queue.
      */
@@ -117,8 +121,8 @@ void Queues::receive() {
             receivedBytes[i] = serialPort.getReadBuffer().at(i);
         }
         serialPort.clearBuffer();
-        Frame newFrame = Frame(receivedBytes);
-        receivedQueue.enqueue(&newFrame);
+        Frame* newFrame = new Frame(receivedBytes);  // Dynamically allocate Frame object
+        receivedQueue.enqueue(newFrame);  // Enqueue the pointer
     }
 }
 
@@ -131,39 +135,41 @@ void Queues::receive() {
      */
 void Queues::processReceive() {
     Frame* frame;
-    switch(receivedQueue.head->frame->frameState) {
-        case 0: //data
-            // Send to file (still to be implemented)
-            frame = new Frame(true);
-            sendingQueue.enqueueAtFront(frame);
-
-            receivedQueue.dequeue();
-            break;
-
-        case 1: //ACK
-            sendingQueue.dequeue();
-            sendingQueue.readyToSend = true;
-            break;
-
-        case 2: //Error
-            if(sendingQueue.sentACK) {
+    if(receivedQueue.head != nullptr) {
+        switch(receivedQueue.head->frame->frameState) {
+            case 0: //data
+                // Send to file (still to be implemented)
                 frame = new Frame(true);
                 sendingQueue.enqueueAtFront(frame);
-            }
-            sendingQueue.readyToSend = true;
-            send();
 
-        case 3: //Fail
-            frame = new Frame(false);
-            sendingQueue.enqueueAtFront(frame);
+                receivedQueue.dequeue();
+                break;
+
+            case 1: //ACK
+                std::cout << "Processing ACK frame" << std::endl;
+                sendingQueue.dequeue();
+                sendingQueue.readyToSend = true;
+                break;
+
+            case 2: //Error
+                if(sendingQueue.sentACK) {
+                    frame = new Frame(true);
+                    sendingQueue.enqueueAtFront(frame);
+                }
+                sendingQueue.readyToSend = true;
+                send();  // Potential recursive call?
+                break;
+
+            default: //Fail
+                frame = new Frame(false);
+                sendingQueue.enqueueAtFront(frame);
+                break;
+        }
     }
+
 }
 
 void Queues::sendByte(uint8_t number) {
     Frame* frame = new Frame(number);
     sendingQueue.enqueue(frame);
-}
-
-void Queues::configureSerialPort() {
-    serialPort.configure();
 }

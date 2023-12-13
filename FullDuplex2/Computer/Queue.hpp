@@ -82,11 +82,11 @@ public:
 
     void removeIfACK();
 
+    void receiveByte();
+
     void receive();
 
     void processReceive();
 
     void sendByte(uint8_t);
-
-    void configureSerialPort();
 };
