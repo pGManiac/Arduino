@@ -70,7 +70,6 @@ void Queue::dequeue() {
      */
 Queues::Queues(const char* _portName) : serialPort(_portName) {
     serialPort.configure();
-    sendingQueue.readyToSend = true;
 }
 
 /**
@@ -84,6 +83,7 @@ void Queues::send() {
         std::cout << "not ready to send";
     } else {
         if (sendingQueue.head != nullptr) {
+            std::cout << "set ready to send to false";
             serialPort.sendBytes(sendingQueue.head->frame->hardWareBytes,
                                  sizeof(sendingQueue.head->frame->hardWareBytes));
             sendingQueue.readyToSend = false;
