@@ -80,11 +80,9 @@ Queues::Queues(const char* _portName) : serialPort(_portName) {
      */
 void Queues::send() {
     if (!sendingQueue.readyToSend) {
-        std::cout << "not ready to send\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
     } else {
         if (sendingQueue.head != nullptr) {
-            std::cout << "set ready to send to false\n";
             serialPort.sendBytes(sendingQueue.head->frame->hardWareBytes,
                                  sizeof(sendingQueue.head->frame->hardWareBytes));
             sendingQueue.readyToSend = false;
@@ -113,9 +111,7 @@ void Queues::removeIfACK() {
      */
 void Queues::receive() {
     serialPort.receive8Bytes();
-    std::cout << "I am in the receive function\n";
     if(serialPort.getBufferAvailability()) {
-        std::cout << "I received smth\n";
         Frame *newFrame = new Frame(serialPort.getReadBuffer());
         serialPort.makeBufferNotAvailable();
         receivedQueue.enqueue(newFrame);  // Enqueue the pointer
@@ -135,7 +131,6 @@ void Queues::processReceive(std::ofstream& of) {
         switch(receivedQueue.head->frame->frameState) {
             case 0: //data
                 // Send to file
-                std::cout << "hi\n";
                 std::cout << receivedQueue.head->frame->data; //print on terminal for test
                 of.write(reinterpret_cast<const char*>(receivedQueue.head->frame->data), sizeof(uint8_t));
                 frame = new Frame(true);

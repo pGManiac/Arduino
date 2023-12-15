@@ -24,10 +24,6 @@ struct ToBeSentToPC {
   }
 
   void dequeue() {
-    digitalWrite(2, HIGH);
-    delay(500);
-    digitalWrite(2, LOW);
-    delay(5000);
     if (head != nullptr) {
       Node* temp = head;
       head = head->next;
@@ -47,20 +43,20 @@ volatile uint8_t bytesToSend[8];
 
 
 void sendToArduino() {
-  if(Serial.available() > 0) {
+  if((Serial.available() > 0) || (numberCollectedBytes == 8)) {
     if (numberCollectedBytes < 8) {
-    uint8_t receivedData = Serial.read();
-    bytesToSend[numberCollectedBytes] = receivedData;
-    numberCollectedBytes++;
+      uint8_t receivedData = Serial.read();
+      bytesToSend[numberCollectedBytes] = receivedData;
+      numberCollectedBytes++;
   } else {
+    digitalWrite(2, HIGH);
+    delay(500);
+    digitalWrite(2, LOW);
+    delay(500);
     numberCollectedBytes = 0;
     for (uint8_t i = 0; i < 8; i++) {
-      digitalWrite(2, HIGH);
-      delay(500);
-      digitalWrite(2, LOW);
-      delay(500);
       PORTC = bytesToSend[i];
-      delay(50); // Adjust delay as needed
+      delay(500); // Adjust delay as needed
     }
   }
   }
@@ -86,11 +82,7 @@ void setup() {
 }
 
 void loop() {
-  //sendToArduino();
-  //sendToPCQueue.dequeue();
-  PORTC = 0x04;
-  delay(50);
-  PORTC = 0x00;
-  delay(50);
+  sendToArduino();
+  sendToPCQueue.dequeue();
   // Add other logic here if needed
 }
