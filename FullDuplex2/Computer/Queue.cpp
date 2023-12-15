@@ -81,6 +81,7 @@ Queues::Queues(const char* _portName) : serialPort(_portName) {
 void Queues::send() {
     if (!sendingQueue.readyToSend) {
         std::cout << "not ready to send";
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     } else {
         if (sendingQueue.head != nullptr) {
             std::cout << "set ready to send to false";
