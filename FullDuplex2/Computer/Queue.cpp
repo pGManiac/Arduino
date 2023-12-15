@@ -23,7 +23,6 @@ void Queue::enqueue(Frame* framePtr) {
         tail->next = newNode;
         tail = newNode;
     }
-    std::cout << framePtr->data;
 }
 
 /**
@@ -71,6 +70,7 @@ void Queue::dequeue() {
      */
 Queues::Queues(const char* _portName) : serialPort(_portName) {
     serialPort.configure();
+    sendingQueue.readyToSend = true;
 }
 
 /**
@@ -81,7 +81,7 @@ Queues::Queues(const char* _portName) : serialPort(_portName) {
      */
 void Queues::send() {
     if (!sendingQueue.readyToSend) {
-
+        std::cout << "not ready to send";
     } else {
         if (sendingQueue.head != nullptr) {
             serialPort.sendBytes(sendingQueue.head->frame->hardWareBytes,
