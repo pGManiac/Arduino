@@ -66,37 +66,40 @@ void SerialPort::sendBytes(const uint8_t* data , size_t size) {
 }
 
 void SerialPort::receive8Bytes() {
-    bytesAvailable = ioctl(fd, FIONREAD, &bytesAvailable);
-    std::cout << bytesAvailable;
-    switch(bytesAvailable) {
-        case -1:
-            std::cerr << "Error checking bytes available in serial port.\n";
-            break;
-        case 0:
-            break;
-        default:
-            if(bytesAvailable >= 8) {
-                read(fd, &buffByte, 8);
-                bytesAvailable = 0;
-                bytesAvailableLast = 0;
-                availableBuffer = true;
+    //bytesAvailable = ioctl(fd, FIONREAD, &bytesAvailable);
+
+    if(fcntl(fd, FIONREAD, &bytesAvailable)) {
+        std::cout << bytesAvailable;
+        switch(bytesAvailable) {
+            case -1:
+                std::cerr << "Error checking bytes available in serial port.\n";
                 break;
-            } else if (bytesAvailable > bytesAvailableLast){
-                bytesAvailableLast = bytesAvailable;
-                receive8Bytes();
-            } else {
-                for (uint8_t & i : buffByte) {
-                    i = 0;
+            case 0:
+                break;
+            default:
+                if(bytesAvailable >= 8) {
+                    read(fd, &buffByte, 8);
+                    bytesAvailable = 0;
+                    bytesAvailableLast = 0;
+                    availableBuffer = true;
+                    break;
+                } else if (bytesAvailable > bytesAvailableLast){
+                    bytesAvailableLast = bytesAvailable;
+                    receive8Bytes();
+                } else {
+                    for (uint8_t & i : buffByte) {
+                        i = 0;
+                    }
+                    fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
+                    char buffer[8];
+                    read(fd, buffer, sizeof(buffer));
+                    availableBuffer = true;
+                    bytesAvailable = 0;
+                    bytesAvailableLast = 0;
+                    fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) & ~O_NONBLOCK);
+                    break;
                 }
-                fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
-                char buffer[8];
-                read(fd, buffer, sizeof(buffer));
-                availableBuffer = true;
-                bytesAvailable = 0;
-                bytesAvailableLast = 0;
-                fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) & ~O_NONBLOCK);
-                break;
-            }
+        }
     }
 
 }
