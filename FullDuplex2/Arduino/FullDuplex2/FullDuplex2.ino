@@ -25,12 +25,14 @@ struct ToBeSentToPC {
 
   void dequeue() {
     if (head != nullptr) {
+      printf(head->byte);
       Node* temp = head;
       head = head->next;
       
       delete temp;
 
       if (head == nullptr) {
+        
         tail = nullptr; // The queue is now empty
       }
     }
@@ -49,14 +51,10 @@ void sendToArduino() {
       bytesToSend[numberCollectedBytes] = receivedData;
       numberCollectedBytes++;
   } else {
-    digitalWrite(2, HIGH);
-    delay(500);
-    digitalWrite(2, LOW);
-    delay(500);
     numberCollectedBytes = 0;
     for (uint8_t i = 0; i < 8; i++) {
       PORTC = bytesToSend[i];
-      delay(500); // Adjust delay as needed
+      delay(2000); // Adjust delay as needed
     }
   }
   }
@@ -74,6 +72,7 @@ void setup() {
   PCMSK0 = 0x04;
   PCICR = 0x01;
   pinMode(2, OUTPUT);
+  sei();
 
   digitalWrite(2, HIGH);
   delay(500);
@@ -82,7 +81,8 @@ void setup() {
 }
 
 void loop() {
-  sendToArduino();
-  sendToPCQueue.dequeue();
+  printf("Hallo\n");
+  //sendToArduino();
+  //sendToPCQueue.dequeue();  
   // Add other logic here if needed
 }
