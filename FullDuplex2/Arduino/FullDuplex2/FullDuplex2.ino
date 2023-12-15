@@ -25,8 +25,13 @@ struct ToBeSentToPC {
 
   void dequeue() {
     if (head != nullptr) {
-      Serial.write(head->byte);
-
+      int test = Serial.write(head->byte);
+      if(test==0) {
+        digitalWrite(2, HIGH);
+        delay(500);
+        digitalWrite(2, LOW);
+        delay(1000);
+      }
       Node* temp = head;
       head = head->next;
       
@@ -72,6 +77,7 @@ void setup() {
   PORTB = 0x00;
   PCICR = 0x0F;
   PCMSK0 = 0x0F;
+  pinMode(2, OUTPUT);
 }
 
 void loop() {
