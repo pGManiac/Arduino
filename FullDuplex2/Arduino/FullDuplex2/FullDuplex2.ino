@@ -91,7 +91,11 @@ void setup() {
 }
 
 void loop() {
-  sendToArduino();
-  sendToPCQueue.dequeue();
+  //sendToArduino();
+  //sendToPCQueue.dequeue();
+  PORTC = 0x04;
+  delay(50);
+  PORTC = 0x00;
+  delay(50);
   // Add other logic here if needed
 }
