@@ -13,11 +13,10 @@
 class SerialPort {
 private:
     int fd;  // File descriptor for the serial port
-    std::vector<uint8_t> read_buf;
     uint8_t buffByte[8];
-    fd_set readSet;
     int bytesAvailable;
     int bytesAvailableLast;
+    bool availableBuffer;
 
 public:
     SerialPort(const char*);
@@ -25,10 +24,11 @@ public:
 
     void configure();
     void sendBytes(const uint8_t*, size_t);
-    void clearBuffer();
+    void makeBufferNotAvailable();
     void receive8Bytes();
 
     const uint8_t* getReadBuffer() const {return buffByte;}
+    const bool getBufferAvailability() const {return availableBuffer;}
 
     int startTimeout();
 };

@@ -75,6 +75,8 @@ private:
     ReceivedQueue receivedQueue;
     SerialPort serialPort;
 
+    //Files
+
 public:
     Queues(const char*);
 

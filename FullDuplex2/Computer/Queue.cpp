@@ -111,10 +111,12 @@ void Queues::removeIfACK() {
      * @brief Receives frame from the serial port and enqueues it in the received queue.
      */
 void Queues::receive() {
-        serialPort.receive8Bytes();
-        Frame* newFrame = new Frame(serialPort.getReadBuffer());
-        serialPort.clearBuffer();
+    serialPort.receive8Bytes();
+    if(serialPort.getBufferAvailability()) {
+        Frame *newFrame = new Frame(serialPort.getReadBuffer());
+        serialPort.makeBufferNotAvailable();
         receivedQueue.enqueue(newFrame);  // Enqueue the pointer
+    }
 }
 
 /**

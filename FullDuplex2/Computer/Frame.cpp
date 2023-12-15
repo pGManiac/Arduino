@@ -124,12 +124,14 @@ void Frame::calcData() {
         switch (hardWareBytes[0] & 0x0C) {
             case 0x0C:
                 frameState = 0x00;
+                break;
             case 0x04:
                 if (data == 0x99) {
                     frameState = 0x01;
                 } else {
                     frameState = 0x02;
                 }
+                break;
         }
     }
 }

@@ -9,6 +9,9 @@ SerialPort::SerialPort(const char* _portName) {
         std::cerr << "Error opening serial port." << std::endl;
         // Handle the error
     }
+    bytesAvailable = 0;
+    bytesAvailableLast = 0;
+    availableBuffer = false;
 }
 
 SerialPort::~SerialPort() {
@@ -75,6 +78,7 @@ void SerialPort::receive8Bytes() {
                 read(fd, &buffByte, 8);
                 bytesAvailable = 0;
                 bytesAvailableLast = 0;
+                availableBuffer = true;
                 break;
             } else if (bytesAvailable > bytesAvailableLast){
                 bytesAvailableLast = bytesAvailable;
@@ -86,6 +90,7 @@ void SerialPort::receive8Bytes() {
                 fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
                 char buffer[8];
                 read(fd, buffer, sizeof(buffer));
+                availableBuffer = true;
                 bytesAvailable = 0;
                 bytesAvailableLast = 0;
                 fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) & ~O_NONBLOCK);
@@ -95,6 +100,6 @@ void SerialPort::receive8Bytes() {
 
 }
 
-void SerialPort::clearBuffer() {
-    read_buf.clear();
+void SerialPort::makeBufferNotAvailable() {
+    availableBuffer = false;
 }
