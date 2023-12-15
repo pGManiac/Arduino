@@ -81,7 +81,7 @@ Queues::Queues(const char* _portName) : serialPort(_portName) {
 void Queues::send() {
     if (!sendingQueue.readyToSend) {
         std::cout << "not ready to send";
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
     } else {
         if (sendingQueue.head != nullptr) {
             std::cout << "set ready to send to false";
@@ -138,6 +138,7 @@ void Queues::processReceive(std::ofstream& of) {
                 of.write(reinterpret_cast<const char*>(receivedQueue.head->frame->data), sizeof(uint8_t));
                 frame = new Frame(true);
                 sendingQueue.enqueueAtFront(frame);
+                sendingQueue.readyToSend = true;
 
                 receivedQueue.dequeue();
                 break;
