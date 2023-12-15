@@ -29,14 +29,6 @@ struct ToBeSentToPC {
     digitalWrite(2, LOW);
     delay(5000);
     if (head != nullptr) {
-      int test = Serial.write(head->byte);
-      if(test==0) {
-        digitalWrite(2, HIGH);
-        delay(500);
-        digitalWrite(2, LOW);
-        delay(5000);
-      }
-
       Node* temp = head;
       head = head->next;
       
@@ -63,12 +55,15 @@ void sendToArduino() {
   } else {
     numberCollectedBytes = 0;
     for (uint8_t i = 0; i < 8; i++) {
+      digitalWrite(2, HIGH);
+      delay(500);
+      digitalWrite(2, LOW);
+      delay(500);
       PORTC = bytesToSend[i];
       delay(50); // Adjust delay as needed
     }
   }
   }
-  
 }
 
 ISR(PCINT0_vect) {
