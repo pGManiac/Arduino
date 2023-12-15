@@ -45,7 +45,8 @@ volatile uint8_t bytesToSend[8];
 
 
 void sendToArduino() {
-  if (numberCollectedBytes < 8) {
+  if(Serial.available() > 0) {
+    if (numberCollectedBytes < 8) {
     uint8_t receivedData = Serial.read();
     bytesToSend[numberCollectedBytes] = receivedData;
     numberCollectedBytes++;
@@ -56,6 +57,8 @@ void sendToArduino() {
       delay(50); // Adjust delay as needed
     }
   }
+  }
+  
 }
 
 ISR(PCINT0_vect) {
@@ -72,9 +75,7 @@ void setup() {
 }
 
 void loop() {
-  if (Serial.available() > 0) {
-    sendToArduino();
-    sendToPCQueue.dequeue();
-  }
+  sendToArduino();
+  sendToPCQueue.dequeue();
   // Add other logic here if needed
 }
