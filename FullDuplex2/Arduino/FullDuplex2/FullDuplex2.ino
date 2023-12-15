@@ -29,7 +29,7 @@ struct ToBeSentToPC {
 
       Node* temp = head;
       head = head->next;
-
+      
       delete temp;
 
       if (head == nullptr) {

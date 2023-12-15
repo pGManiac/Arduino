@@ -132,6 +132,7 @@ void Queues::processReceive(std::ofstream& of) {
         switch(receivedQueue.head->frame->frameState) {
             case 0: //data
                 // Send to file
+                std::cout << "hi";
                 std::cout << receivedQueue.head->frame->data; //print on terminal for test
                 of.write(reinterpret_cast<const char*>(receivedQueue.head->frame->data), sizeof(uint8_t));
                 frame = new Frame(true);
