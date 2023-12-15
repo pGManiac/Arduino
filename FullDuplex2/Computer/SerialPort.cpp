@@ -67,6 +67,7 @@ void SerialPort::sendBytes(const uint8_t* data , size_t size) {
 
 void SerialPort::receive8Bytes() {
     bytesAvailable = ioctl(fd, FIONREAD, &bytesAvailable);
+    std::cout << bytesAvailable;
     switch(bytesAvailable) {
         case -1:
             std::cerr << "Error checking bytes available in serial port.\n";

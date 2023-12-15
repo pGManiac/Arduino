@@ -113,7 +113,9 @@ void Queues::removeIfACK() {
      */
 void Queues::receive() {
     serialPort.receive8Bytes();
+    std::cout << "I am in the receive function";
     if(serialPort.getBufferAvailability()) {
+        std::cout << "I received smth";
         Frame *newFrame = new Frame(serialPort.getReadBuffer());
         serialPort.makeBufferNotAvailable();
         receivedQueue.enqueue(newFrame);  // Enqueue the pointer
@@ -155,12 +157,14 @@ void Queues::processReceive(std::ofstream& of) {
                     sendingQueue.enqueueAtFront(frame);
                 }
                 sendingQueue.readyToSend = true;
+                std::cout << "error";
                 send();  // Potential recursive call?
                 break;
 
             default: //Fail
                 frame = new Frame(false);
                 sendingQueue.enqueueAtFront(frame);
+                std::cout << "fail";
                 break;
         }
     }

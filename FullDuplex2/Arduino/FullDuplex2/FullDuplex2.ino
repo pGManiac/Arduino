@@ -40,11 +40,11 @@ struct ToBeSentToPC {
 };
 
 volatile ToBeSentToPC sendToPCQueue;
+volatile uint8_t numberCollectedBytes = 0;
+volatile uint8_t bytesToSend[8];
+
 
 void sendToArduino() {
-  static uint8_t numberCollectedBytes = 0;
-  static uint8_t bytesToSend[8];
-
   if (numberCollectedBytes < 8) {
     uint8_t receivedData = Serial.read();
     bytesToSend[numberCollectedBytes] = receivedData;
