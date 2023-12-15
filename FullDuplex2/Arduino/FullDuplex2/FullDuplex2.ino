@@ -81,7 +81,7 @@ void setup() {
 }
 
 void loop() {
-  printf("Hallo\n");
+  Serial.write("Hallo\n");
   //sendToArduino();
   //sendToPCQueue.dequeue();  
   // Add other logic here if needed
