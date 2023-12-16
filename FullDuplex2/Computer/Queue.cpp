@@ -81,6 +81,7 @@ Queues::Queues(const char* _portName) : serialPort(_portName) {
 void Queues::send() {
     if (!sendingQueue.readyToSend) {
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        std::cout << "not ready to send\n";
     } else {
         if (sendingQueue.head != nullptr) {
             serialPort.sendBytes(sendingQueue.head->frame->hardWareBytes,
@@ -128,6 +129,7 @@ void Queues::receive() {
 void Queues::processReceive(std::ofstream& of) {
     Frame* frame;
     if(receivedQueue.head != nullptr) {
+        std::cout << "I received something";
         switch(receivedQueue.head->frame->frameState) {
             case 0: //data
                 // Send to file
