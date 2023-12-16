@@ -86,6 +86,7 @@ void Queues::send() {
         if (sendingQueue.head != nullptr) {
             serialPort.sendBytes(sendingQueue.head->frame->hardWareBytes,
                                  sizeof(sendingQueue.head->frame->hardWareBytes));
+            std::cout << sendingQueue.head->frame->hardWareBytes << "\n";
             sendingQueue.readyToSend = false;
             removeIfACK();
         }

@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <termios.h>
 #include <sys/ioctl.h>
+#include <chrono>
+#include <thread>
 
 int main() {
     const char* portName = "/dev/ttyUSB0";
@@ -11,7 +13,7 @@ int main() {
     // Open the serial port
     int serialPort = open(portName, O_RDWR | O_NOCTTY);
     if (serialPort == -1) {
-        std::cerr << "Error opening serial port." << std::endl;
+        std::cerr << "Error opening serial port: " << std::endl;
         return 1;
     }
 
@@ -38,11 +40,8 @@ int main() {
         // Print the number of bytes available
         std::cout << "Bytes available: " << bytesAvailable << std::endl;
 
-        bytesRead = read(serialPort, buffer, sizeof(buffer));
-        if (bytesRead > 0) {
-            // Process the received data as needed
-            std::cout << "Received: " << static_cast<int>(buffer[0]) << std::endl;
-        }
+        // Add a delay to avoid busy-waiting
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
     return 0;

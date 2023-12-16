@@ -81,8 +81,12 @@ void setup() {
 }
 
 void loop() {
-  sendToArduino();
-  sendToPCQueue.dequeue();  
+  uint8_t byte = 255;
+  Serial.write(byte);
+  Serial.flush();
+  
+  //sendToArduino();
+  //sendToPCQueue.dequeue();  
   // Add other logic here if needed
 
 }
