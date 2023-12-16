@@ -21,41 +21,11 @@ SerialPort::~SerialPort() {
 
 void SerialPort::configure() {
     struct termios serialConfig;
-
-    // Get the current serial port configuration
-    if (tcgetattr(fd, &serialConfig) != 0) {
-        std::cerr << "Error getting current serial port configuration.,\n";
-        return;
-    }
-
-    // Set the input and output baud rate to 9600
-    cfsetispeed(&serialConfig, B9600);
-    cfsetospeed(&serialConfig, B9600);
-
-    // Set data bits to 8
-    serialConfig.c_cflag &= ~CSIZE; //clears existing CSIZE bits
-    serialConfig.c_cflag |= CS8;
-
-    // Disable hardware flow control, aka RTS/CTS
-    serialConfig.c_cflag &= ~CRTSCTS;
-
-    // Set parity to no parity
-    serialConfig.c_cflag &= ~PARENB;
-    serialConfig.c_cflag &= ~CSTOPB;
-
-    // Disable software flow control
-    serialConfig.c_iflag &= ~(IXON | IXOFF | IXANY);
-
-    // Set raw input
-    serialConfig.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
-
-    // Set raw output
-    serialConfig.c_oflag &= ~OPOST;
-
-    // Apply the configuration
-    if (tcsetattr(fd, TCSAFLUSH, &serialConfig) != 0) {
-        std::cerr << "Error configuring serial port.\n";
-    }
+    tcgetattr(fd, &serialConfig);
+    cfsetospeed(&serialConfig, 9600);
+    cfsetispeed(&serialConfig, 9600);
+    serialConfig.c_cflag |= (CLOCAL | CREAD);
+    tcsetattr(fd, TCSANOW, &serialConfig);
 }
 
 
@@ -91,8 +61,8 @@ void SerialPort::receive8Bytes() {
                         i = 0;
                     }
                     fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
-                    char buffer[8];
-                    read(fd, buffer, sizeof(buffer));
+                    char trashbuffer[8];
+                    read(fd, trashbuffer, sizeof(trashbuffer));
                     availableBuffer = true;
                     bytesAvailable = 0;
                     bytesAvailableLast = 0;
