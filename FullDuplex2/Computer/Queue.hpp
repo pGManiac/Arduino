@@ -77,10 +77,21 @@ private:
     ReceivedQueue receivedQueue;
     SerialPort serialPort;
 
-    //Files
+    std::ifstream inputFile;
+    std::ofstream outputFile;
 
 public:
     Queues(const char*);
+
+    void openInputFile(const char*);
+
+    void openOutputFile(const char*);
+
+    void closeInputFile();
+
+    void closeOutputFile();
+
+    bool readByteFromFile(char&);
 
     void send();
 

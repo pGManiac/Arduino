@@ -68,8 +68,67 @@ void Queue::dequeue() {
      *
      * Initializes the serial port with the specified port name and configures it.
      */
-Queues::Queues(const char* _portName) : serialPort(_portName) {
+Queues::Queues(const char* _portName) : serialPort(_portName), inputFile(), outputFile() {
     serialPort.configure();
+}
+
+/**
+     * @brief Opens the input file.
+     * 
+     * Opens the input file in binary mode. If the input file can not be opened an error message is printed.
+     * 
+     * @param inputFileName The name of the input file to be opened.
+    */
+void Queues::openInputFile(const char* inputFileName) {
+    inputFile.open(inputFileName, std::ios::in | std::ios::binary);
+    if(!inputFile.is_open()) {
+        std::cerr << "Error opening input file.\n";
+        return 1;
+    }
+}
+
+/**
+     * @brief Opens the output file.
+     * 
+     * Opens the output file in binary mode. If the input file can not be opened an error message is printed.
+     * 
+     * @param outputFileName The name of the output file to be opened.
+    */
+void Queues::openOutputFile(const char* outputFileName) {
+    outputFile.open(outputFileName, std::ios::out | std::ios::binary);
+    if(!outputFile.is_open()){
+        std::cerr << "Error opening output file.\n"
+    }
+}
+
+/**
+     * @brief Closes the input file.
+    */
+void Queues::closeInputFile() {
+    if(inputFile.is_open()) {
+        inputFile.close();
+    }
+}
+
+/**
+     * @brief Closes the output file.
+    */
+void Queues::closeOutputFile() {
+    if(outputFile.is_open()) {
+        outputFile.close();
+    }
+}
+
+/**
+     * @brief Reads a byte from the input file.
+     * 
+     * Attempts to read a byte from the input file associated with this Queues instance.
+     * 
+     * @param byte A reference to a char variable where the read byte will be stored.
+     * @return Returns true if a byte was successfully read, false otherwise.
+    */
+bool Queues::readByteFromFile(char& byte) {
+    return static_cast<bool>(inputFile.get(byte));
 }
 
 /**

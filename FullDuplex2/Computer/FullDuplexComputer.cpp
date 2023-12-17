@@ -10,27 +10,16 @@ const char* outputFileName = "output.txt";
 int main() {
     Queues queues(portName);
 
-    //open input file
-    std::ifstream inputFile(inputFileName, std::ios::in | std::ios::binary);
-    if (!inputFile.is_open()) {
-        std::cerr << "Error opening input file." << std::endl;
-        return 1;
-    }
-
-    // open output file
-    std::ofstream outputFile(outputFileName, std::ios::out | std::ios::binary);
-    if (!outputFile.is_open()) {
-        std::cerr << "Error opening output file." << std::endl;
-        return 1;
-    }
+    queues.openInputFile(inputFileName);
+    queues.openOutputFile(outputFileName);
 
     usleep(5000000);
 
     char byteFromFile;
-    while (inputFile.get(byteFromFile)) {
+    while (queues.readByteFromFile(byteFromFile)) {
         queues.sendByte(static_cast<uint8_t>(byteFromFile));
     }
-    inputFile.close();
+    queues.closeInputFile();
 
     /*
     uint8_t number;
