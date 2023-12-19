@@ -68,8 +68,66 @@ void Queue::dequeue() {
      *
      * Initializes the serial port with the specified port name and configures it.
      */
-Queues::Queues(const char* _portName) : serialPort(_portName) {
+Queues::Queues(const char* _portName) : serialPort(_portName), inputFile(), outputFile() {
     serialPort.configure();
+}
+
+/**
+     * @brief Opens the input file.
+     * 
+     * Opens the input file in binary mode. If the input file can not be opened an error message is printed.
+     * 
+     * @param inputFileName The name of the input file to be opened.
+    */
+void Queues::openInputFile(const char* inputFileName) {
+    inputFile.open(inputFileName, std::ios::in | std::ios::binary);
+    if(!inputFile.is_open()) {
+        std::cerr << "Error opening input file.\n";
+    }
+}
+
+/**
+     * @brief Opens the output file.
+     * 
+     * Opens the output file in binary mode. If the input file can not be opened an error message is printed.
+     * 
+     * @param outputFileName The name of the output file to be opened.
+    */
+void Queues::openOutputFile(const char* outputFileName) {
+    outputFile.open(outputFileName, std::ios::out | std::ios::binary);
+    if(!outputFile.is_open()){
+        std::cerr << "Error opening output file.\n";
+    }
+}
+
+/**
+     * @brief Closes the input file.
+    */
+void Queues::closeInputFile() {
+    if(inputFile.is_open()) {
+        inputFile.close();
+    }
+}
+
+/**
+     * @brief Closes the output file.
+    */
+void Queues::closeOutputFile() {
+    if(outputFile.is_open()) {
+        outputFile.close();
+    }
+}
+
+/**
+     * @brief Reads a byte from the input file.
+     * 
+     * Attempts to read a byte from the input file associated with this Queues instance.
+     * 
+     * @param byte A reference to a char variable where the read byte will be stored.
+     * @return Returns true if a byte was successfully read, false otherwise.
+    */
+bool Queues::readByteFromFile(char& byte) {
+    return static_cast<bool>(inputFile.get(byte));
 }
 
 /**
@@ -81,10 +139,12 @@ Queues::Queues(const char* _portName) : serialPort(_portName) {
 void Queues::send() {
     if (!sendingQueue.readyToSend) {
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        std::cout << "not ready to send\n";
     } else {
         if (sendingQueue.head != nullptr) {
             serialPort.sendBytes(sendingQueue.head->frame->hardWareBytes,
                                  sizeof(sendingQueue.head->frame->hardWareBytes));
+            std::cout << sendingQueue.head->frame->hardWareBytes << "\n";
             sendingQueue.readyToSend = false;
             removeIfACK();
         }
@@ -125,14 +185,15 @@ void Queues::receive() {
      * different actions, such as sending frames, dequeuing frames, and initiating
      * the sending process.
      */
-void Queues::processReceive(std::ofstream& of) {
+void Queues::processReceive() {
     Frame* frame;
     if(receivedQueue.head != nullptr) {
+        std::cout << "I received something";
         switch(receivedQueue.head->frame->frameState) {
             case 0: //data
                 // Send to file
                 std::cout << receivedQueue.head->frame->data; //print on terminal for test
-                of.write(reinterpret_cast<const char*>(receivedQueue.head->frame->data), sizeof(uint8_t));
+                outputFile.write(reinterpret_cast<const char*>(receivedQueue.head->frame->data), sizeof(uint8_t));
                 frame = new Frame(true);
                 sendingQueue.enqueueAtFront(frame);
                 sendingQueue.readyToSend = true;

@@ -103,6 +103,9 @@
 		<Unit filename="/home/myoshka/Documents/HWP/Arduino/FullDuplex2/Computer/SerialPort.hpp">
 			<Option target="Computer"/>
 		</Unit>
+		<Unit filename="/home/myoshka/Documents/HWP/Arduino/FullDuplex2/Computer/testHardwareBytes.cpp">
+			<Option target="Computer"/>
+		</Unit>
 		<Unit filename="/home/myoshka/Documents/HWP/Arduino/FullDuplex2/Computer/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

@@ -25,7 +25,7 @@ struct ToBeSentToPC {
 
   void dequeue() {
     if (head != nullptr) {
-      printf(head->byte);
+      Serial.write(head->byte);
       Node* temp = head;
       head = head->next;
       
@@ -81,8 +81,12 @@ void setup() {
 }
 
 void loop() {
-  Serial.write("Hallo\n");
+  uint8_t byte = 255;
+  Serial.write(byte);
+  Serial.flush();
+  
   //sendToArduino();
   //sendToPCQueue.dequeue();  
   // Add other logic here if needed
+
 }

@@ -225,6 +225,30 @@ SerialPort.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Computer.dir/build.make CMakeFiles/Computer.dir/SerialPort.cpp.s
 .PHONY : SerialPort.cpp.s
 
+testHardwareBytes.o: testHardwareBytes.cpp.o
+.PHONY : testHardwareBytes.o
+
+# target to build an object file
+testHardwareBytes.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Computer.dir/build.make CMakeFiles/Computer.dir/testHardwareBytes.cpp.o
+.PHONY : testHardwareBytes.cpp.o
+
+testHardwareBytes.i: testHardwareBytes.cpp.i
+.PHONY : testHardwareBytes.i
+
+# target to preprocess a source file
+testHardwareBytes.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Computer.dir/build.make CMakeFiles/Computer.dir/testHardwareBytes.cpp.i
+.PHONY : testHardwareBytes.cpp.i
+
+testHardwareBytes.s: testHardwareBytes.cpp.s
+.PHONY : testHardwareBytes.s
+
+# target to generate assembly for a file
+testHardwareBytes.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Computer.dir/build.make CMakeFiles/Computer.dir/testHardwareBytes.cpp.s
+.PHONY : testHardwareBytes.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -246,6 +270,9 @@ help:
 	@echo "... SerialPort.o"
 	@echo "... SerialPort.i"
 	@echo "... SerialPort.s"
+	@echo "... testHardwareBytes.o"
+	@echo "... testHardwareBytes.i"
+	@echo "... testHardwareBytes.s"
 .PHONY : help
 
 

@@ -1,16 +1,19 @@
 #include <iostream>
 #include <fcntl.h>
-#include <termios.h>
 #include <unistd.h>
+#include <termios.h>
+#include <sys/ioctl.h>
+#include <chrono>
+#include <thread>
 
 int main() {
     const char* portName = "/dev/ttyUSB0";
-    const speed_t baudRate = B9600; // Adjust baud rate based on your configuration
+    const speed_t baudRate = B9600;
 
     // Open the serial port
     int serialPort = open(portName, O_RDWR | O_NOCTTY);
     if (serialPort == -1) {
-        std::cerr << "Error opening serial port." << std::endl;
+        std::cerr << "Error opening serial port: " << std::endl;
         return 1;
     }
 
@@ -27,15 +30,19 @@ int main() {
     ssize_t bytesRead;
 
     while (true) {
-        bytesRead = read(serialPort, buffer, sizeof(buffer));
-        if (bytesRead > 0) {
-            // Process the received data as needed
-            std::cout.write(buffer, bytesRead);
+        // Use ioctl to get the number of bytes available for reading
+        int bytesAvailable;
+        if (ioctl(serialPort, FIONREAD, &bytesAvailable) == -1) {
+            std::cerr << "Error checking bytes available in serial port." << std::endl;
+            return 1;
         }
-    }
 
-    // Close the serial port
-    close(serialPort);
+        // Print the number of bytes available
+        std::cout << "Bytes available: " << bytesAvailable << std::endl;
+
+        // Add a delay to avoid busy-waiting
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
 
     return 0;
 }

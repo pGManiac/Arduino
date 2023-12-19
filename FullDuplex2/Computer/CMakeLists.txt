@@ -11,4 +11,5 @@ add_executable(Computer
         SerialPort.cpp
         Frame.cpp
         Queue.cpp
+        testHardwareBytes.cpp
 )
