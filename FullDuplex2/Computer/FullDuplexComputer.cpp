@@ -35,6 +35,6 @@ int main() {
 
         queues.receive();
 
-        queues.processReceive(outputFile);
+        queues.processReceive();
     }
 }

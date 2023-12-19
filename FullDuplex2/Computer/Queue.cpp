@@ -185,7 +185,7 @@ void Queues::receive() {
      * different actions, such as sending frames, dequeuing frames, and initiating
      * the sending process.
      */
-void Queues::processReceive(std::ofstream& of) {
+void Queues::processReceive() {
     Frame* frame;
     if(receivedQueue.head != nullptr) {
         std::cout << "I received something";
@@ -193,7 +193,7 @@ void Queues::processReceive(std::ofstream& of) {
             case 0: //data
                 // Send to file
                 std::cout << receivedQueue.head->frame->data; //print on terminal for test
-                of.write(reinterpret_cast<const char*>(receivedQueue.head->frame->data), sizeof(uint8_t));
+                outputFile.write(reinterpret_cast<const char*>(receivedQueue.head->frame->data), sizeof(uint8_t));
                 frame = new Frame(true);
                 sendingQueue.enqueueAtFront(frame);
                 sendingQueue.readyToSend = true;

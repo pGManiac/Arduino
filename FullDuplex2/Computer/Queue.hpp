@@ -99,7 +99,7 @@ public:
 
     void receive();
 
-    void processReceive(std::ofstream& of);
+    void processReceive();
 
     void sendByte(uint8_t);
 };
