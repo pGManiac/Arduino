@@ -1,4 +1,5 @@
 #include "Frame.hpp"
+#include "iostream"
 
 /**
       * @brief Default constructor.
@@ -18,7 +19,8 @@ Frame::Frame() {
 Frame::Frame(uint8_t _data) : data(_data) {
         //Fill index 8-15 with bits from checksum, highest significant bit comes first
         checksum = _data ^ xorChecksum;
-        0 << frameState;
+        frameState = 0x00;
+        //I think this should be frameState = 0? Because 0 << means you're doing a shift by 0 pos
         calcBytesToBeSent();
 }
 
@@ -67,12 +69,24 @@ Frame::Frame(bool acknowledge) {
      */
 void Frame::calcBytesToBeSent() {
     //highest significant bits first
+    uint8_t calculatedValue;
     switch (frameState) {
         case 0:
-            hardWareBytes[0] = 0x0C | ((data & 0xC0) >> 6);
-            hardWareBytes[1] = 0x00 | ((data & 0x30) >> 4);
-            hardWareBytes[2] = 0x04 | ((data & 0x0C) >> 2);
-            hardWareBytes[3] = 0x00 | ((data & 0x03));
+            hardWareBytes[0] = data;
+            std::cout << +hardWareBytes[0] << "\n";
+            calculatedValue = (0x0C | ((data & 0xC0) >> 6));
+            std::cout << +calculatedValue << "\n";
+            hardWareBytes[0] = calculatedValue;
+            std::cout << +hardWareBytes[0] << "\n";
+            calculatedValue = (0x00 | ((data & 0x30) >> 4));
+            hardWareBytes[1] = calculatedValue;
+            std::cout << +hardWareBytes[1] << "\n";
+            calculatedValue = 0x04 | ((data & 0x0C) >> 2);
+            hardWareBytes[2] = calculatedValue;
+            std::cout << +hardWareBytes[2] << "\n";
+            calculatedValue = 0x00 | ((data & 0x03));
+            hardWareBytes[3] = calculatedValue;
+            std::cout << +hardWareBytes[3] << "\n";
 
             hardWareBytes[4] = 0x04 | ((checksum & 0xC0) >> 6);
             hardWareBytes[5] = 0x00 | ((checksum & 0x30) >> 4);
@@ -118,6 +132,7 @@ void Frame::calcData() {
         data |= ((hardWareBytes[i] & 0x03) << (6-(i*2)));
         checksum |= ((hardWareBytes[i+4] & 0x03) << (6-(i*2)));
     }
+    std::cout << data << "\n";
     if ((data ^ xorChecksum) != checksum) {
         frameState = 0x03;
     } else {
