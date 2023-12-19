@@ -72,28 +72,21 @@ void Frame::calcBytesToBeSent() {
     uint8_t calculatedValue;
     switch (frameState) {
         case 0:
-            hardWareBytes[0] = data;
-            std::cout << +hardWareBytes[0] << "\n";
             calculatedValue = (0x0C | ((data & 0xC0) >> 6));
-            std::cout << +calculatedValue << "\n";
             hardWareBytes[0] = calculatedValue;
-            std::cout << +hardWareBytes[0] << "\n";
             calculatedValue = (0x00 | ((data & 0x30) >> 4));
             hardWareBytes[1] = calculatedValue;
-            std::cout << +hardWareBytes[1] << "\n";
             calculatedValue = 0x04 | ((data & 0x0C) >> 2);
             hardWareBytes[2] = calculatedValue;
-            std::cout << +hardWareBytes[2] << "\n";
             calculatedValue = 0x00 | ((data & 0x03));
             hardWareBytes[3] = calculatedValue;
-            std::cout << +hardWareBytes[3] << "\n";
 
             hardWareBytes[4] = 0x04 | ((checksum & 0xC0) >> 6);
             hardWareBytes[5] = 0x00 | ((checksum & 0x30) >> 4);
             hardWareBytes[6] = 0x04 | ((checksum & 0x0C) >> 2);
             hardWareBytes[7] = 0x00 | ((checksum & 0x03));
             break;
-        case 1:
+        default:
             hardWareBytes[0] = 0x04 | ((data & 0xC0) >> 6);
             hardWareBytes[1] = 0x08 | ((data & 0x30) >> 4);
             hardWareBytes[2] = 0x0C | ((data & 0x0C) >> 2);
@@ -104,16 +97,6 @@ void Frame::calcBytesToBeSent() {
             hardWareBytes[6] = 0x0C | ((checksum & 0x0C) >> 2);
             hardWareBytes[7] = 0x08 | ((checksum & 0x03));
             break;
-            /*case 2: //case for error technically redundant
-                hardWareBytes[0] = (data & 0xC0) >> 6;
-                hardWareBytes[1] = (data & 0x30) >> 4;
-                hardWareBytes[2] = (data & 0x0C) >> 2;
-                hardWareBytes[3] = (data & 0x03);
-
-                hardWareBytes[4] = (checksum & 0xC0) >> 6;
-                hardWareBytes[5] = (checksum & 0x30) >> 4;
-                hardWareBytes[6] = (checksum & 0x0C) >> 2;
-                hardWareBytes[7] = (checksum & 0x03);*/
     }
 }
 
@@ -128,11 +111,13 @@ void Frame::calcBytesToBeSent() {
      */
 void Frame::calcData() {
     //reconstruct data, checksum and frameState from byteArray
-    for (uint8_t i = 0; i < 4; ++i) {
+    data = 0x00;
+    checksum = 0x00;
+    for (uint8_t i = 0; i < 4; i++) {
         data |= ((hardWareBytes[i] & 0x03) << (6-(i*2)));
         checksum |= ((hardWareBytes[i+4] & 0x03) << (6-(i*2)));
     }
-    std::cout << data << "\n";
+
     if ((data ^ xorChecksum) != checksum) {
         frameState = 0x03;
     } else {
