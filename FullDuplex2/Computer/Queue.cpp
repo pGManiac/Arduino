@@ -83,7 +83,6 @@ void Queues::openInputFile(const char* inputFileName) {
     inputFile.open(inputFileName, std::ios::in | std::ios::binary);
     if(!inputFile.is_open()) {
         std::cerr << "Error opening input file.\n";
-        return 1;
     }
 }
 
@@ -97,7 +96,7 @@ void Queues::openInputFile(const char* inputFileName) {
 void Queues::openOutputFile(const char* outputFileName) {
     outputFile.open(outputFileName, std::ios::out | std::ios::binary);
     if(!outputFile.is_open()){
-        std::cerr << "Error opening output file.\n"
+        std::cerr << "Error opening output file.\n";
     }
 }
 
