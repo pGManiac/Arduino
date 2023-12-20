@@ -26,10 +26,13 @@ struct Queue {
     if (head != nullptr) {
       Node* temp = head;
       head = head->next;
+
       // If the queue becomes empty after dequeue
       if (head == nullptr) {
         tail = nullptr;
       }
+
+      delete temp;
     }
   }
 };
@@ -55,13 +58,27 @@ struct SendToArduinoQueue {
       uint8_t receivedData = Serial.read();
       queue.enqueue(receivedData);
       length++;
+      if(receivedData == 5) {
+        
+      }
     }
   }
   
   void sendToArduino() {
     if(length == 8) {
       for(int i = 0; i < 8; i++) {
-        PORTC = queue.head;
+        delay(1000);
+        
+        /**
+        if(i%2==0) {
+          PORTC = 0x04;
+        } else {
+          PORTC = 0x00;
+        }
+        **/
+        
+        PORTC = queue.head->byte;
+        
         queue.dequeue();
         length--;
       }
