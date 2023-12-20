@@ -54,10 +54,9 @@ void sendToArduino() {
     numberCollectedBytes = 0;
     for (uint8_t i = 0; i < 8; i++) {
       PORTC = bytesToSend[i];
-      delay(10000); // Adjust delay as needed
       digitalWrite(2, HIGH);
-      delay(100);
-      digitalWrite(2, LOW):
+      delay(500);
+      digitalWrite(2, LOW);
     }
   }
   }

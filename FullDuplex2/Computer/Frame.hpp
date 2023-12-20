@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <iostream>
 
 const uint8_t xorChecksum = 0b01010101;
 
@@ -24,7 +25,7 @@ struct Frame {
 
     Frame(uint8_t);
 
-    Frame(uint8_t[8]);
+    Frame(const uint8_t*);
 
     Frame(bool);
 

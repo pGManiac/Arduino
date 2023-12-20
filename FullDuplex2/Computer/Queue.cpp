@@ -173,7 +173,8 @@ void Queues::receive() {
     if(serialPort.getBufferAvailability()) {
         Frame *newFrame = new Frame(serialPort.getReadBuffer());
         serialPort.makeBufferNotAvailable();
-        receivedQueue.enqueue(newFrame);  // Enqueue the pointer
+        receivedQueue.enqueue(newFrame);
+        std::cout << "Framestate in receive: " << static_cast<int>(newFrame->frameState) << "\n";  // Enqueue the pointer
     }
 }
 
@@ -187,7 +188,7 @@ void Queues::receive() {
 void Queues::processReceive() {
     Frame* frame;
     if(receivedQueue.head != nullptr) {
-        std::cout << "Framestate:" << static_cast<int>(receivedQueue.head->frame->frameState) << "\n";
+        std::cout << "Data:" << static_cast<int>(receivedQueue.head->frame->data) << "\n";
         std::cout << "I received something\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
         switch(receivedQueue.head->frame->frameState) {

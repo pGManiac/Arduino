@@ -29,11 +29,13 @@ Frame::Frame(uint8_t _data) : data(_data) {
      *
      * @param _receivedBytes Array of received bytes.
      */
-Frame::Frame(uint8_t _receivedBytes[8]) {
+Frame::Frame(const uint8_t* _receivedBytes) {
         for(uint8_t i = 0; i < 8; i++) {
             hardWareBytes[i] = _receivedBytes[i];
         }
-        calcData();
+    std::cout << "HARDWARE constructor\n";
+
+    calcData();
 }
 
 /**
@@ -44,6 +46,8 @@ Frame::Frame(uint8_t _receivedBytes[8]) {
      * @param acknowledge Boolean indicating if it's an ACK frame (true) or Error frame (false).
      */
 Frame::Frame(bool acknowledge) {
+    std::cout << "BOOLEAN constructor\n";
+
     if(acknowledge) {
         data = 0b10011001;
         checksum = data ^ xorChecksum;
@@ -120,6 +124,7 @@ void Frame::calcData() {
             case 0x04:
                 if (data == 0x99) {
                     frameState = 0x01;
+                    std::cout << "Ich habe auf unerklärhliche Weise einen ACK erstellt\n";
                 } else {
                     frameState = 0x02;
                 }

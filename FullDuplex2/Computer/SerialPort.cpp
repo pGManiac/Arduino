@@ -59,12 +59,12 @@ void SerialPort::receive8Bytes() {
                 receive8Bytes();
             } else {
                 for (uint8_t & i : buffByte) {
-                    i = 0;
+                    i = 0   ;
                 }
                 std::cout << "Müll\n";
                 fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
                 char trashbuffer[8];
-                //read(fd, trashbuffer, sizeof(trashbuffer));
+                read(fd, trashbuffer, sizeof(trashbuffer));
                 availableBuffer = true;
                 bytesAvailable = 0;
                 bytesAvailableLast = 0;
