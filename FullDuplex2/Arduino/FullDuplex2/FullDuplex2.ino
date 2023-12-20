@@ -5,11 +5,11 @@ struct Node {
   Node(uint8_t _byte, Node* nextNode) : byte(_byte), next(nextNode) {}
 };
 
-struct ToBeSentToPC {
+struct Queue {
   Node* head;
   Node* tail;
 
-  ToBeSentToPC() : head(nullptr), tail(nullptr) {
+  Queue() : head(nullptr), tail(nullptr) {
     
   }
 
@@ -22,48 +22,58 @@ struct ToBeSentToPC {
       tail = newNode;
     }
   }
-
   void dequeue() {
     if (head != nullptr) {
-      Serial.write(head->byte);
       Node* temp = head;
       head = head->next;
-      
-      delete temp;
-
+      // If the queue becomes empty after dequeue
       if (head == nullptr) {
-        
-        tail = nullptr; // The queue is now empty
+        tail = nullptr;
       }
     }
   }
 };
 
-volatile ToBeSentToPC sendToPCQueue;
-volatile uint8_t numberCollectedBytes = 0;
-volatile uint8_t bytesToSend[8];
+struct SendToPCQueue {
+  Queue queue;
 
-
-void sendToArduino() {
-  if((Serial.available() > 0) || (numberCollectedBytes == 8)) {
-    if (numberCollectedBytes < 8) {
-      uint8_t receivedData = Serial.read();
-      bytesToSend[numberCollectedBytes] = receivedData;
-      numberCollectedBytes++;
-  } else {
-    numberCollectedBytes = 0;
-    for (uint8_t i = 0; i < 8; i++) {
-      PORTC = bytesToSend[i];
-      digitalWrite(2, HIGH);
-      delay(500);
-      digitalWrite(2, LOW);
+  void writeAndDequeue() {
+    if (queue.head != nullptr) {
+      Serial.write(queue.head->byte);
+      queue.dequeue();
     }
   }
+
+};
+
+struct SendToArduinoQueue {
+  Queue queue;
+  int length;
+
+  void readFromPC() {
+    if((Serial.available() > 0) && (length < 8) ) {
+      uint8_t receivedData = Serial.read();
+      queue.enqueue(receivedData);
+      length++;
+    }
   }
-}
+  
+  void sendToArduino() {
+    if(length == 8) {
+      for(int i = 0; i < 8; i++) {
+        PORTC = queue.head;
+        queue.dequeue();
+        length--;
+      }
+    }
+  }
+}; 
+
+volatile SendToPCQueue sendToPCQueue;
+volatile SendToArduinoQueue sendToArduinoQueue;
 
 ISR(PCINT0_vect) {
-  sendToPCQueue.enqueue(PINB);
+  sendToPCQueue.queue.enqueue(PINB);
 }
 
 void setup() {
@@ -83,15 +93,9 @@ void loop() {
   //Serial.write(byte);
   //Serial.flush();
   
-  sendToArduino();
-  sendToPCQueue.dequeue();
-  sendToPCQueue.dequeue();
-  sendToPCQueue.dequeue();
-  sendToPCQueue.dequeue();  
-  sendToPCQueue.dequeue();
-  sendToPCQueue.dequeue();
-  sendToPCQueue.dequeue();
-  sendToPCQueue.dequeue();
+  sendToArduinoQueue.readFromPC();
+  sendToArduinoQueue.sendToArduino();
+  sendToPCQueue.writeAndDequeue();
   // Add other logic here if needed
 
 }
