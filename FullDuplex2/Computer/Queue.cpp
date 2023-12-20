@@ -187,8 +187,9 @@ void Queues::receive() {
 void Queues::processReceive() {
     Frame* frame;
     if(receivedQueue.head != nullptr) {
-        std::cout << static_cast<int>(receivedQueue.head->frame->frameState);
-        std::cout << "I received something";
+        std::cout << "Framestate:" << static_cast<int>(receivedQueue.head->frame->frameState) << "\n";
+        std::cout << "I received something\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
         switch(receivedQueue.head->frame->frameState) {
             case 0: //data
                 // Send to file

@@ -38,7 +38,7 @@ void SerialPort::sendBytes(const uint8_t* data , size_t size) {
 
 void SerialPort::receive8Bytes() {
     ioctl(fd, FIONREAD, &bytesAvailable);
-    std::cout << bytesAvailable << "\n";
+    std::cout << "Bytes available:" << bytesAvailable << "\n";
     switch(bytesAvailable) {
         case -1:
             std::cerr << "Error checking bytes available in serial port.\n";
@@ -54,14 +54,17 @@ void SerialPort::receive8Bytes() {
                 break;
             } else if (bytesAvailable > bytesAvailableLast){
                 bytesAvailableLast = bytesAvailable;
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                std::cout << "Bin in else if\n";
                 receive8Bytes();
             } else {
                 for (uint8_t & i : buffByte) {
                     i = 0;
                 }
+                std::cout << "Müll\n";
                 fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
                 char trashbuffer[8];
-                read(fd, trashbuffer, sizeof(trashbuffer));
+                //read(fd, trashbuffer, sizeof(trashbuffer));
                 availableBuffer = true;
                 bytesAvailable = 0;
                 bytesAvailableLast = 0;
