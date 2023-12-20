@@ -102,4 +102,6 @@ public:
     void processReceive();
 
     void sendByte(uint8_t);
+
+    void flush();
 };

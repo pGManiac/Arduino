@@ -27,6 +27,8 @@ public:
     void makeBufferNotAvailable();
     void receive8Bytes();
 
+    void flush() const;
+
     const uint8_t* getReadBuffer() const { return buffByte; }
     const bool getBufferAvailability() const {return availableBuffer;}
 

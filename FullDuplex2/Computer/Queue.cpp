@@ -142,6 +142,7 @@ void Queues::send() {
         std::cout << "not ready to send\n";
     } else {
         if (sendingQueue.head != nullptr) {
+            std::cout << "Ich bin in der Sendefunktion und der head ist kein nullptr\n";
             serialPort.sendBytes(sendingQueue.head->frame->hardWareBytes,
                                  sizeof(sendingQueue.head->frame->hardWareBytes));
             sendingQueue.readyToSend = false;
@@ -232,4 +233,8 @@ void Queues::processReceive() {
 void Queues::sendByte(uint8_t number) {
     Frame* frame = new Frame(number);
     sendingQueue.enqueue(frame);
+}
+
+void Queues::flush() {
+    serialPort.flush();
 }

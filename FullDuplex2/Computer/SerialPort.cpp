@@ -28,6 +28,14 @@ void SerialPort::configure() {
     tcsetattr(fd, TCSANOW, &serialConfig);
 }
 
+void SerialPort::flush() const {
+    // Flush both input and output buffers
+    if (tcflush(fd, TCIOFLUSH) != 0) {
+        std::cerr << "Error flushing serial port.\n";
+        // Handle the error
+    }
+}
+
 
 void SerialPort::sendBytes(const uint8_t* data , size_t size) {
     std::cout << "Sent something\n";

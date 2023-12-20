@@ -20,6 +20,7 @@ int main() {
         queues.sendByte(static_cast<uint8_t>(byteFromFile));
     }
     queues.closeInputFile();
+    queues.flush();
 
     /*
     uint8_t number;
