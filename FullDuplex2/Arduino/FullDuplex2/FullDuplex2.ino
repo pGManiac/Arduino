@@ -54,7 +54,10 @@ void sendToArduino() {
     numberCollectedBytes = 0;
     for (uint8_t i = 0; i < 8; i++) {
       PORTC = bytesToSend[i];
-      delay(2000); // Adjust delay as needed
+      delay(10000); // Adjust delay as needed
+      digitalWrite(2, HIGH);
+      delay(100);
+      digitalWrite(2, LOW):
     }
   }
   }
@@ -73,20 +76,22 @@ void setup() {
   PCICR = 0x01;
   pinMode(2, OUTPUT);
   sei();
-
-  digitalWrite(2, HIGH);
-  delay(500);
-  digitalWrite(2, LOW);
-  delay(500);
 }
 
 void loop() {
-  uint8_t byte = 255;
-  Serial.write(byte);
-  Serial.flush();
+  //uint8_t byte = 255;
+  //Serial.write(byte);
+  //Serial.flush();
   
-  //sendToArduino();
-  //sendToPCQueue.dequeue();  
+  sendToArduino();
+  sendToPCQueue.dequeue();
+  sendToPCQueue.dequeue();
+  sendToPCQueue.dequeue();
+  sendToPCQueue.dequeue();  
+  sendToPCQueue.dequeue();
+  sendToPCQueue.dequeue();
+  sendToPCQueue.dequeue();
+  sendToPCQueue.dequeue();
   // Add other logic here if needed
 
 }
