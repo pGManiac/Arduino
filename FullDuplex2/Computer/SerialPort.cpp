@@ -30,6 +30,7 @@ void SerialPort::configure() {
 
 
 void SerialPort::sendBytes(const uint8_t* data , size_t size) {
+    std::cout << "Sent something\n";
     if (write(fd, data, size) == -1) {
         std::cerr << "Error writing to serial port.\n";
     }

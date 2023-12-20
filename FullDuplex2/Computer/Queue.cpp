@@ -187,6 +187,7 @@ void Queues::receive() {
 void Queues::processReceive() {
     Frame* frame;
     if(receivedQueue.head != nullptr) {
+        std::cout << static_cast<int>(receivedQueue.head->frame->frameState);
         std::cout << "I received something";
         switch(receivedQueue.head->frame->frameState) {
             case 0: //data
