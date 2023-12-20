@@ -22,15 +22,6 @@ int main() {
     queues.closeInputFile();
     queues.flush();
 
-    /*
-    uint8_t number;
-    std::cout << "Enter a number to be sent\n";
-    std::cin >> number;
-
-    queues.sendByte(number);
-    std::cout << "Sent number" << number << "\n";
-    */
-
     while(true) {
         queues.send();
 

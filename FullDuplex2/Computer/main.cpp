@@ -32,6 +32,7 @@ int main() {
     const char buffer[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};
     const int bufferSize = sizeof(buffer);
 
+    /**
     while (true) {
         ssize_t bytesWritten = write(serialPort, buffer, bufferSize);
 
@@ -45,13 +46,10 @@ int main() {
         // Add a delay if needed
         usleep(1000000); // 1 second delay
     }
+    **/
 
-    /**
     while (true) {
-        write(serialPort, _buffer, sizeof(buffer));
         // Use ioctl to get the number of bytes available for reading
-
-
         int bytesAvailable;
         if (ioctl(serialPort, FIONREAD, &bytesAvailable) == -1) {
             std::cerr << "Error checking bytes available in serial port." << std::endl;
@@ -65,7 +63,5 @@ int main() {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
-        return 0;
-    }
-     **/
+    return 0;
 }
