@@ -1,5 +1,7 @@
 #include "Queue.hpp"
 
+
+
 /**
      * @brief Default constructor.
      *
@@ -131,7 +133,7 @@ bool Queues::readByteFromFile(char& byte) {
 }
 
 
-void Queues::writeByteToFile(uint8_t& byte, char* filename) {
+void Queues::writeByteToFile(uint8_t& byte, const char* filename) {
     try {
         if (!outputFile.is_open()) {
             openOutputFile(filename);

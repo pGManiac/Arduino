@@ -7,11 +7,11 @@ const char* portName = "/dev/ttyUSB0";
 const char* inputFileName = "input.txt";
 const char* outputFileName = "output.txt";
 
+
 int main() {
     Queues queues(portName);
 
     queues.openInputFile(inputFileName);
-    queues.openOutputFile(outputFileName);
 
     usleep(5000000);
 

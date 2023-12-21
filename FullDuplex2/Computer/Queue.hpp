@@ -10,6 +10,8 @@
 
 
 
+
+
 /**
  * @brief Represents a node in a linked list with Frame data.
  *
@@ -93,7 +95,7 @@ public:
 
     bool readByteFromFile(char&);
 
-    void writeByteToFile(uint8_t&, char*);
+    void writeByteToFile(uint8_t&, const char*);
 
     void send();
 
