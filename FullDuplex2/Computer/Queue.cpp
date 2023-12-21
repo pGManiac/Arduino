@@ -154,7 +154,7 @@ void Queues::writeByteToFile(uint8_t& byte, const char* filename) {
      */
 void Queues::send() {
     if (!sendingQueue.readyToSend) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         std::cout << "not ready to send\n";
     } else {
         if (sendingQueue.head != nullptr) {
@@ -205,13 +205,12 @@ void Queues::receive() {
 void Queues::processReceive() {
     Frame* frame;
     if(receivedQueue.head != nullptr) {
-        std::cout << "Data:" << static_cast<int>(receivedQueue.head->frame->data) << "\n";
-        std::cout << "I received something\n";
+        std::cout << "Data receivedqueue head:" << static_cast<int>(receivedQueue.head->frame->data) << "\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
         switch(receivedQueue.head->frame->frameState) {
             case 0: //data
                 // Send to file
-                std::cout << receivedQueue.head->frame->data << "\n"; //print on terminal for test
+                std::cout << "Case 0 data: " << receivedQueue.head->frame->data << "\n"; //print on terminal for test
                 writeByteToFile(receivedQueue.head->frame->data, "output.txt");
                 frame = new Frame(true);
                 sendingQueue.enqueueAtFront(frame);
@@ -221,7 +220,7 @@ void Queues::processReceive() {
                 break;
 
             case 1: //ACK
-                std::cout << "Processing ACK frame\n";
+                std::cout << "head ist ACK\n";
                 sendingQueue.dequeue();
                 sendingQueue.readyToSend = true;
                 break;
@@ -232,14 +231,14 @@ void Queues::processReceive() {
                     sendingQueue.enqueueAtFront(frame);
                 }
                 sendingQueue.readyToSend = true;
-                std::cout << "error\n";
+                std::cout << "head ist error\n";
                 send();  // Potential recursive call?
                 break;
 
             default: //Fail
                 frame = new Frame(false);
                 sendingQueue.enqueueAtFront(frame);
-                std::cout << "fail\n";
+                std::cout << "head ist fail state\n";
                 break;
         }
     }

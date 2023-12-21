@@ -38,7 +38,7 @@ void SerialPort::flush() const {
 
 
 void SerialPort::sendBytes(const uint8_t* data , size_t size) {
-    std::cout << "Sent something\n";
+    std::cout << "Sent: " << data << "\n";
     if (write(fd, data, size) == -1) {
         std::cerr << "Error writing to serial port.\n";
     }
@@ -46,6 +46,7 @@ void SerialPort::sendBytes(const uint8_t* data , size_t size) {
 
 void SerialPort::receive8Bytes() {
     ioctl(fd, FIONREAD, &bytesAvailable);
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
     std::cout << "Bytes available:" << bytesAvailable << "\n";
     switch(bytesAvailable) {
         case -1:
@@ -69,7 +70,7 @@ void SerialPort::receive8Bytes() {
                 for (uint8_t & i : buffByte) {
                     i = 0   ;
                 }
-                std::cout << "Müll\n";
+                std::cout << "Nicht genug bytes bekommen -> Fail hardwarebytes erstellen\n";
                 fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
                 char trashbuffer[8];
                 read(fd, trashbuffer, sizeof(trashbuffer));
