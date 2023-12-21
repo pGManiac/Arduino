@@ -130,6 +130,20 @@ bool Queues::readByteFromFile(char& byte) {
     return static_cast<bool>(inputFile.get(byte));
 }
 
+
+void Queues::writeByteToFile(uint8_t& byte, char* filename) {
+    try {
+        if (!outputFile.is_open()) {
+            openOutputFile(filename);
+        }
+
+        outputFile.put(byte);
+    } catch (const std::ios_base::failure& e) {
+        std::cerr << "Error writing to file: " << e.what() << std::endl;
+    }
+}
+
+
 /**
      * @brief Sends the front frame from the sending queue.
      *
@@ -195,8 +209,8 @@ void Queues::processReceive() {
         switch(receivedQueue.head->frame->frameState) {
             case 0: //data
                 // Send to file
-                std::cout << receivedQueue.head->frame->data; //print on terminal for test
-                outputFile.write(reinterpret_cast<const char*>(receivedQueue.head->frame->data), sizeof(uint8_t));
+                std::cout << receivedQueue.head->frame->data << "\n"; //print on terminal for test
+                writeByteToFile(receivedQueue.head->frame->data, "output.txt");
                 frame = new Frame(true);
                 sendingQueue.enqueueAtFront(frame);
                 sendingQueue.readyToSend = true;

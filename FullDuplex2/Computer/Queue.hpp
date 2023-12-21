@@ -93,6 +93,8 @@ public:
 
     bool readByteFromFile(char&);
 
+    void writeByteToFile(uint8_t&, char*);
+
     void send();
 
     void removeIfACK();
