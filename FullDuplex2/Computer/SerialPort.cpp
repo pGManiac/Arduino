@@ -38,7 +38,11 @@ void SerialPort::flush() const {
 
 
 void SerialPort::sendBytes(const uint8_t* data , size_t size) {
-    std::cout << "Sent: " << data << "\n";
+    std::cout << "Sent: ";
+    for (size_t i = 0; i < size; ++i) {
+        std::cout << static_cast<int>(data[i]) << " ";
+    }
+    std::cout << "\n";
     if (write(fd, data, size) == -1) {
         std::cerr << "Error writing to serial port.\n";
     }
