@@ -57,7 +57,7 @@ int main() {
         }
 
         // Print the number of bytes available
-        std::cout << "Bytes available: " << bytesAvailable << std::endl;
+        std::cout << "Bytes available: " << bytesAvailable << "\n";
 
         // Add a delay to avoid busy-waiting
         std::this_thread::sleep_for(std::chrono::milliseconds(100));

@@ -177,6 +177,30 @@ FullDuplexComputer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Computer.dir/build.make CMakeFiles/Computer.dir/FullDuplexComputer.cpp.s
 .PHONY : FullDuplexComputer.cpp.s
 
+HardWareReferenz.o: HardWareReferenz.cpp.o
+.PHONY : HardWareReferenz.o
+
+# target to build an object file
+HardWareReferenz.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Computer.dir/build.make CMakeFiles/Computer.dir/HardWareReferenz.cpp.o
+.PHONY : HardWareReferenz.cpp.o
+
+HardWareReferenz.i: HardWareReferenz.cpp.i
+.PHONY : HardWareReferenz.i
+
+# target to preprocess a source file
+HardWareReferenz.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Computer.dir/build.make CMakeFiles/Computer.dir/HardWareReferenz.cpp.i
+.PHONY : HardWareReferenz.cpp.i
+
+HardWareReferenz.s: HardWareReferenz.cpp.s
+.PHONY : HardWareReferenz.s
+
+# target to generate assembly for a file
+HardWareReferenz.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Computer.dir/build.make CMakeFiles/Computer.dir/HardWareReferenz.cpp.s
+.PHONY : HardWareReferenz.cpp.s
+
 Queue.o: Queue.cpp.o
 .PHONY : Queue.o
 
@@ -240,6 +264,9 @@ help:
 	@echo "... FullDuplexComputer.o"
 	@echo "... FullDuplexComputer.i"
 	@echo "... FullDuplexComputer.s"
+	@echo "... HardWareReferenz.o"
+	@echo "... HardWareReferenz.i"
+	@echo "... HardWareReferenz.s"
 	@echo "... Queue.o"
 	@echo "... Queue.i"
 	@echo "... Queue.s"

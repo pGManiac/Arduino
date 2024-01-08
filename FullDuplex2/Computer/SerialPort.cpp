@@ -67,7 +67,7 @@ void SerialPort::receive8Bytes() {
                 break;
             } else if (bytesAvailable > bytesAvailableLast){
                 bytesAvailableLast = bytesAvailable;
-                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                std::this_thread::sleep_for(std::chrono::milliseconds(5000));
                 std::cout << "Bin in else if\n";
                 receive8Bytes();
             } else {

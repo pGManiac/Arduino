@@ -91,6 +91,9 @@
 		<Unit filename="/home/klames/CPPProjects/Arduino/FullDuplex2/Computer/FullDuplexComputer.cpp">
 			<Option target="Computer"/>
 		</Unit>
+		<Unit filename="/home/klames/CPPProjects/Arduino/FullDuplex2/Computer/HardWareReferenz.cpp">
+			<Option target="Computer"/>
+		</Unit>
 		<Unit filename="/home/klames/CPPProjects/Arduino/FullDuplex2/Computer/Queue.cpp">
 			<Option target="Computer"/>
 		</Unit>

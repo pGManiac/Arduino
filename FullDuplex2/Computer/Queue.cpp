@@ -158,7 +158,7 @@ void Queues::send() {
         std::cout << "not ready to send\n";
     } else {
         if (sendingQueue.head != nullptr) {
-            std::cout << "Ich bin in der Sendefunktion und der head ist kein nullptr\n";
+            std::cout << "Queues::send() head not empty\n";
             serialPort.sendBytes(sendingQueue.head->frame->hardWareBytes,
                                  sizeof(sendingQueue.head->frame->hardWareBytes));
             sendingQueue.readyToSend = false;
@@ -191,7 +191,7 @@ void Queues::receive() {
         Frame *newFrame = new Frame(serialPort.getReadBuffer());
         serialPort.makeBufferNotAvailable();
         receivedQueue.enqueue(newFrame);
-        std::cout << "Framestate in receive: " << static_cast<int>(newFrame->frameState) << "\n";  // Enqueue the pointer
+        std::cout << "Framestate of the received byte: " << static_cast<int>(newFrame->frameState) << "\n";  // Enqueue the pointer
     }
 }
 
@@ -220,7 +220,7 @@ void Queues::processReceive() {
                 break;
 
             case 1: //ACK
-                std::cout << "head ist ACK\n";
+                std::cout << "receivedQueue head ist ACK\n";
                 sendingQueue.dequeue();
                 sendingQueue.readyToSend = true;
                 break;
@@ -231,14 +231,14 @@ void Queues::processReceive() {
                     sendingQueue.enqueueAtFront(frame);
                 }
                 sendingQueue.readyToSend = true;
-                std::cout << "head ist error\n";
+                std::cout << "receivedQueue head ist error\n";
                 send();  // Potential recursive call?
                 break;
 
             default: //Fail
                 frame = new Frame(false);
                 sendingQueue.enqueueAtFront(frame);
-                std::cout << "head ist fail state\n";
+                std::cout << "receivedQueue head ist fail state\n";
                 break;
         }
     }
