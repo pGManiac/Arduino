@@ -44,6 +44,10 @@ struct SendToPCQueue {
     while (queue.head != nullptr) {
       Serial.write(queue.head->byte);
       queue.dequeue();
+      digitalWrite(2,HIGH);
+      delay(200);
+      digitalWrite(2, LOW);
+      delay(200);
     }
   }
 
@@ -64,6 +68,7 @@ struct SendToArduinoQueue {
   void sendToArduino() {
     if(length == 8) {
       for(int i = 0; i < 8; i++) {
+        
         PORTC = queue.head->byte;
         queue.dequeue();
         length--;
@@ -96,6 +101,8 @@ void loop() {
   //uint8_t byte = 255;
   //Serial.write(byte);
   //Serial.flush(); 
+  //Serial.write(50);
+  delay(1000);
   sendToArduinoQueue.readFromPC();
   sendToArduinoQueue.sendToArduino();
   sendToPCQueue.writeAndDequeue();

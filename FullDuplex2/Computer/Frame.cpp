@@ -59,6 +59,7 @@ Frame::Frame(bool acknowledge) {
         frameState = 2;
         calcBytesToBeSent();
     }
+
 }
 
 /**
