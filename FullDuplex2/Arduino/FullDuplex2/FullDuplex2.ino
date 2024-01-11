@@ -41,7 +41,7 @@ struct SendToPCQueue {
   Queue queue;
 
   void writeAndDequeue() {
-    if (queue.head != nullptr) {
+    while (queue.head != nullptr) {
       Serial.write(queue.head->byte);
       queue.dequeue();
     }
@@ -58,29 +58,16 @@ struct SendToArduinoQueue {
       uint8_t receivedData = Serial.read();
       queue.enqueue(receivedData);
       length++;
-      if(receivedData == 5) {
-        
-      }
     }
   }
   
   void sendToArduino() {
     if(length == 8) {
       for(int i = 0; i < 8; i++) {
-        delay(1000);
-        
-        /**
-        if(i%2==0) {
-          PORTC = 0x04;
-        } else {
-          PORTC = 0x00;
-        }
-        **/
-        
         PORTC = queue.head->byte;
-        
         queue.dequeue();
         length--;
+        delay(100);
       }
     }
   }
@@ -91,7 +78,7 @@ volatile SendToArduinoQueue sendToArduinoQueue;
 
 ISR(PCINT0_vect) {
   sendToPCQueue.queue.enqueue(PINB);
-}
+  }
 
 void setup() {
   Serial.begin(9600);
@@ -108,8 +95,7 @@ void setup() {
 void loop() {
   //uint8_t byte = 255;
   //Serial.write(byte);
-  //Serial.flush();
-  
+  //Serial.flush(); 
   sendToArduinoQueue.readFromPC();
   sendToArduinoQueue.sendToArduino();
   sendToPCQueue.writeAndDequeue();
