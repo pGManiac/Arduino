@@ -226,6 +226,7 @@ void Queues::processReceive() {
                 std::cout << "receivedQueue head ist ACK\n";
                 sendingQueue.dequeue();
                 sendingQueue.readyToSend = true;
+                receivedQueue.dequeue();
                 break;
 
             case 2: //Error
