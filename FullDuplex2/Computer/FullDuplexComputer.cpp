@@ -19,13 +19,23 @@ int main() {
 
     std::string eingabe;
     uint8_t zeichen;
+
+    // Read input from standard input (stdin)
+    while (std::getline(std::cin, line)) {
+        for (int i = 0; i < line.length(); i++) {
+            zeichen = line.at(i);
+            queues.sendByte(zeichen);
+        }
+    }
+    
+    /*
     std::cout << "Eingabe: ";
     std::getline(std::cin, eingabe);
 
     for (int i = 0; i < eingabe.length(); i++) {
         zeichen = eingabe.at(i);
         queues.sendByte(zeichen);
-    }
+    }*/
 
     /**
 
