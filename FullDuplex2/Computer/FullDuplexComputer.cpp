@@ -27,15 +27,16 @@ int main() {
         queues.sendByte(zeichen);
     }
 
-    /*
+    /**
+
     char byteFromFile;
     while (queues.readByteFromFile(byteFromFile)) {
         queues.sendByte(static_cast<uint8_t>(byteFromFile));
     }
     queues.closeInputFile();
-    */
     queues.flush();
 
+     **/
 
     while(true) {
         queues.send();
