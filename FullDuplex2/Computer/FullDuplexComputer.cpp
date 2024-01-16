@@ -17,14 +17,14 @@ int main() {
 
     usleep(5000000);
 
-    std::string eingabe;
-    uint8_t zeichen;
+    std::string line;
+    uint8_t character;
 
     // Read input from standard input (stdin)
     while (std::getline(std::cin, line)) {
         for (int i = 0; i < line.length(); i++) {
-            zeichen = line.at(i);
-            queues.sendByte(zeichen);
+            character = line.at(i);
+            queues.sendByte(character);
         }
     }
     
