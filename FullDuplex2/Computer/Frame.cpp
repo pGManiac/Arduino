@@ -74,6 +74,7 @@ Frame::Frame(bool acknowledge) {
      */
 void Frame::calcBytesToBeSent() {
     //highest significant bits first
+    std::cout << "Sent this data: " << static_cast<int>(data) << "\n";
     switch (frameState) {
         case 0:
             hardWareBytes[0] = 0x0C | ((data & 0xC0) >> 6);

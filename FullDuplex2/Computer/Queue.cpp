@@ -236,6 +236,7 @@ void Queues::processReceive() {
                 }
                 sendingQueue.readyToSend = true;
                 std::cout << "receivedQueue head ist error\n";
+                receivedQueue.dequeue();
                 send();  // Potential recursive call?
                 break;
 
@@ -243,6 +244,7 @@ void Queues::processReceive() {
                 frame = new Frame(false);
                 sendingQueue.enqueueAtFront(frame);
                 std::cout << "receivedQueue head ist fail state\n";
+                receivedQueue.dequeue();
                 break;
         }
     }
