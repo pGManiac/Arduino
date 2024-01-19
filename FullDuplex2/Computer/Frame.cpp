@@ -46,14 +46,16 @@ Frame::Frame(const uint8_t* _receivedBytes) {
      * @param acknowledge Boolean indicating if it's an ACK frame (true) or Error frame (false).
      */
 Frame::Frame(bool acknowledge) {
-    std::cout << "BOOLEAN constructor\n";
+    //std::cout << "BOOLEAN constructor\n";
 
     if(acknowledge) {
+        std::cout << "created ack frame\n";
         data = 0b10011001;
         checksum = data ^ xorChecksum;
         frameState = 1;
         calcBytesToBeSent();
     } else {
+        std::cout << "created an error frame\n";
         data = 0b01100110;
         checksum = data ^ xorChecksum;
         frameState = 2;
@@ -125,9 +127,10 @@ void Frame::calcData() {
             case 0x04:
                 if (data == 0x99) {
                     frameState = 0x01;
-                    std::cout << "Ich habe auf unerklärhliche Weise einen ACK erstellt\n";
+                    std::cout << "Ich habe auf unerklärliche Weise einen ACK erstellt\n";
                 } else {
                     frameState = 0x02;
+                    std::cout << "Ich habe einen guten Error erstellt\n";
                 }
                 break;
         }
