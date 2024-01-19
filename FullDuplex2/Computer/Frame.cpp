@@ -33,7 +33,7 @@ Frame::Frame(const uint8_t* _receivedBytes) {
         for(uint8_t i = 0; i < 8; i++) {
             hardWareBytes[i] = _receivedBytes[i];
         }
-    std::cout << "HARDWARE constructor\n";
+    //std::cout << "HARDWARE constructor\n";
 
     calcData();
 }
@@ -74,7 +74,7 @@ Frame::Frame(bool acknowledge) {
      */
 void Frame::calcBytesToBeSent() {
     //highest significant bits first
-    std::cout << "Sent this data: " << static_cast<int>(data) << "\n";
+    //std::cout << "Sent this data: " << static_cast<int>(data) << "\n";
     switch (frameState) {
         case 0:
             hardWareBytes[0] = 0x0C | ((data & 0xC0) >> 6);
@@ -128,10 +128,10 @@ void Frame::calcData() {
             case 0x04:
                 if (data == 0x99) {
                     frameState = 0x01;
-                    std::cout << "Ich habe auf unerklärliche Weise einen ACK erstellt\n";
+                    //std::cout << "Ich habe auf unerklärliche Weise einen ACK erstellt\n";
                 } else {
                     frameState = 0x02;
-                    std::cout << "Ich habe einen guten Error erstellt\n";
+                    std::cout << "Ich habe einen Error erstellt\n";
                 }
                 break;
         }

@@ -155,10 +155,10 @@ void Queues::writeByteToFile(uint8_t& byte, const char* filename) {
 void Queues::send() {
     if (!sendingQueue.readyToSend) {
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        std::cout << "not ready to send\n";
+        //std::cout << "not ready to send\n";
     } else {
         if (sendingQueue.head != nullptr) {
-            std::cout << "Queues::send() head not empty\n";
+            //std::cout << "Queues::send() head not empty\n";
             serialPort.sendBytes(sendingQueue.head->frame->hardWareBytes,
                                  sizeof(sendingQueue.head->frame->hardWareBytes));
             sendingQueue.readyToSend = false;
