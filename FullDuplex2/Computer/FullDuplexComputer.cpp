@@ -29,7 +29,7 @@ int main() {
     }
     queues.sendFin("fin");
 
-    while(!queues.isReceivedFIN() || !queues.isSentFIN() || !queues.isSendingQueueReadyToSend()) {
+    while((queues.isReceivedFIN() == 0) || (queues.isSentFIN() == 0) || (queues.isSendingQueueReadyToSend() == 0)) {
         queues.send();
 
         queues.receive();
