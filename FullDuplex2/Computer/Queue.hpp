@@ -108,5 +108,7 @@ public:
 
     void sendByte(uint8_t);
 
+    void sendFin(char);
+
     void flush();
 };

@@ -259,6 +259,11 @@ void Queues::sendByte(uint8_t number) {
     sendingQueue.enqueue(frame);
 }
 
+void Queues::sendFin(char fin) {
+    Frame* frame = new Frame(fin);
+    sendingQueue.enqueue(frame);
+}
+
 void Queues::flush() {
     serialPort.flush();
 }
