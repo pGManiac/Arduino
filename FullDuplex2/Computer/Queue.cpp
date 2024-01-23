@@ -72,6 +72,8 @@ void Queue::dequeue() {
      */
 Queues::Queues(const char* _portName) : serialPort(_portName), inputFile(), outputFile() {
     serialPort.configure();
+    sentFIN = false;
+    receivedFIN = false;
 }
 
 /**
@@ -199,12 +201,12 @@ void Queues::receive() {
 }
 
 /**
-     * @brief Processes the front frame in the received queue based on its frame state.
-     *
-     * Depending on the frame state of the front frame in the received queue, performs
-     * different actions, such as sending frames, dequeuing frames, and initiating
-     * the sending process.
-     */
+ * @brief Processes the front frame in the received queue based on its frame state.
+ *
+ * Depending on the frame state of the front frame in the received queue, performs
+ * different actions, such as sending frames, dequeuing frames, and initiating
+ * the sending process.
+ */
 void Queues::processReceive() {
     Frame* frame;
     if(receivedQueue.head != nullptr) {
@@ -217,7 +219,9 @@ void Queues::processReceive() {
                 writeByteToFile(receivedQueue.head->frame->data, "output.txt");
                 frame = new Frame(true);
                 sendingQueue.enqueueAtFront(frame);
-                sendingQueue.readyToSend = true;
+
+                //Ich bin mir verhältnismäßig sicher, dass diese line hier keinen Sinn ergeben hat.
+                //sendingQueue.readyToSend = true;
 
                 receivedQueue.dequeue();
                 break;
@@ -241,8 +245,13 @@ void Queues::processReceive() {
                 break;
 
             case 3: //Fin
+                std::cout << "receivedQueue head ist FIN\n";
+                receivedFIN = true;
 
+                sendingQueue.enqueueAtFront(frame);
 
+                receivedQueue.dequeue();
+                break;
             default: //Fail
                 frame = new Frame(false);
                 sendingQueue.enqueueAtFront(frame);
@@ -254,16 +263,29 @@ void Queues::processReceive() {
 
 }
 
+/**
+ * @brief Adds a data frame to the sendingQueue
+ *
+ * @param number The content of the data frame
+ */
 void Queues::sendByte(uint8_t number) {
     Frame* frame = new Frame(number);
     sendingQueue.enqueue(frame);
 }
 
+/**
+ * @brief Adds a FIN frame to the sendingQueue
+ *
+ * @param fin The content of the FIN frame.
+ */
 void Queues::sendFin(std::string fin) {
     Frame* frame = new Frame(fin);
     sendingQueue.enqueue(frame);
 }
 
+/**
+ * @brief Flushes the serial port buffer.
+ */
 void Queues::flush() {
     serialPort.flush();
 }

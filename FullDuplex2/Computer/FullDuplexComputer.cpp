@@ -28,28 +28,8 @@ int main() {
         }
     }
     queues.sendFin("fin");
-    
-    /*
-    std::cout << "Eingabe: ";
-    std::getline(std::cin, eingabe);
 
-    for (int i = 0; i < eingabe.length(); i++) {
-        zeichen = eingabe.at(i);
-        queues.sendByte(zeichen);
-    }*/
-
-    /**
-
-    char byteFromFile;
-    while (queues.readByteFromFile(byteFromFile)) {
-        queues.sendByte(static_cast<uint8_t>(byteFromFile));
-    }
-    queues.closeInputFile();
-    queues.flush();
-
-     **/
-
-    while(true) {
+    while(!queues.isReceivedFIN() || !queues.isSentFIN() || !queues.isSendingQueueReadyToSend()) {
         queues.send();
 
         queues.receive();

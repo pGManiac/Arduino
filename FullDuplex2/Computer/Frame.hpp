@@ -25,13 +25,13 @@ struct Frame {
 
     Frame();
 
-    Frame(uint8_t);
+    Frame(const uint8_t);
 
     Frame(const uint8_t*);
 
     Frame(bool);
 
-    Frame(std::string);
+    Frame(const std::string);
 
     void calcBytesToBeSent();
 

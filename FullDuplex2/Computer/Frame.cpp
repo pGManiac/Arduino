@@ -15,7 +15,7 @@ Frame::Frame() {
        *
        * @param data The data byte used to construct the frame.
        */
-Frame::Frame(uint8_t _data) : data(_data) {
+Frame::Frame(const uint8_t _data) : data(_data) {
         //Fill index 8-15 with bits from checksum, highest significant bit comes first
         checksum = _data ^ xorChecksum;
         frameState = 0x00;
@@ -61,10 +61,9 @@ Frame::Frame(bool acknowledge) {
         frameState = 2;
         calcBytesToBeSent();
     }
-
 }
 
-Frame::Frame(std::string fin) {
+Frame::Frame(const std::string fin) {
     if(fin == "fin") {
         std::cout << "created fin frame\n";
         data = 0b01010101;

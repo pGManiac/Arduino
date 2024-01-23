@@ -81,6 +81,9 @@ private:
     ReceivedQueue receivedQueue;
     SerialPort serialPort;
 
+    bool sentFIN;
+    bool receivedFIN;
+
     std::ifstream inputFile;
     std::ofstream outputFile;
 
@@ -112,4 +115,16 @@ public:
     void sendFin(std::string);
 
     void flush();
+
+    inline bool isSentFIN() const {
+        return sentFIN;
+    }
+
+    inline bool isReceivedFIN() const {
+        return receivedFIN;
+    }
+
+    inline bool isSendingQueueReadyToSend() const {
+        return sendingQueue.readyToSend;
+    }
 };
