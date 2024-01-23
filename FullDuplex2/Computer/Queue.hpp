@@ -4,6 +4,7 @@
 #include <thread>
 #include <chrono>
 #include <cstdlib>
+#include <string>
 
 
 #include "Frame.hpp"
@@ -108,7 +109,7 @@ public:
 
     void sendByte(uint8_t);
 
-    void sendFin(char);
+    void sendFin(std::string);
 
     void flush();
 };

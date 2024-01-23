@@ -27,7 +27,7 @@ int main() {
             queues.sendByte(character);
         }
     }
-    queues.sendFin('f');
+    queues.sendFin("fin");
     
     /*
     std::cout << "Eingabe: ";

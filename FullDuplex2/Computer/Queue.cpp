@@ -259,7 +259,7 @@ void Queues::sendByte(uint8_t number) {
     sendingQueue.enqueue(frame);
 }
 
-void Queues::sendFin(char fin) {
+void Queues::sendFin(std::string fin) {
     Frame* frame = new Frame(fin);
     sendingQueue.enqueue(frame);
 }

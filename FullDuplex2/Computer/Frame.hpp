@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <iostream>
+#include <string>
 
 const uint8_t xorChecksum = 0b01010101;
 
@@ -30,7 +31,7 @@ struct Frame {
 
     Frame(bool);
 
-    Frame(char);
+    Frame(std::string);
 
     void calcBytesToBeSent();
 

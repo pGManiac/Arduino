@@ -64,8 +64,8 @@ Frame::Frame(bool acknowledge) {
 
 }
 
-Frame::Frame(char fin) {
-    if(fin == 'f') {
+Frame::Frame(std::string fin) {
+    if(fin == "fin") {
         std::cout << "created fin frame\n";
         data = 0b01010101;
         checksum = data ^ xorChecksum;
