@@ -17,7 +17,8 @@ struct Frame {
                          - 00: Data
                          - 01: ACK
                          - 10: Error
-                         - 11: fail state
+                         - 11: Fin
+                         - 100: Fail State
                      */
     uint8_t hardWareBytes[8];
 
@@ -28,6 +29,8 @@ struct Frame {
     Frame(const uint8_t*);
 
     Frame(bool);
+
+    Frame(char);
 
     void calcBytesToBeSent();
 

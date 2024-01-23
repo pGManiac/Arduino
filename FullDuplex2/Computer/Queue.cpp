@@ -240,6 +240,9 @@ void Queues::processReceive() {
                 send();  // Potential recursive call?
                 break;
 
+            case 3: //Fin
+
+
             default: //Fail
                 frame = new Frame(false);
                 sendingQueue.enqueueAtFront(frame);

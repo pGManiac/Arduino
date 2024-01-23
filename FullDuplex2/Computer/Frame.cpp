@@ -64,6 +64,18 @@ Frame::Frame(bool acknowledge) {
 
 }
 
+Frame::Frame(char fin) {
+    if(fin == 'f') {
+        std::cout << "created fin frame\n";
+        data = 0b01010101;
+        checksum = data ^ xorChecksum;
+        frameState = 3;
+        calcBytesToBeSent();
+    } else {
+        std::cerr << "Illegal frame in fin constructor\n";
+    }
+}
+
 /**
      * @brief Calculate the hardware bytes to be sent based on the current frame state.
      *
@@ -119,7 +131,7 @@ void Frame::calcData() {
         checksum |= ((hardWareBytes[i+4] & 0x03) << (6-(i*2)));
     }
     if ((data ^ xorChecksum) != checksum) {
-        frameState = 0x03;
+        frameState = 0x04;
     } else {
         switch (hardWareBytes[0] & 0x0C) {
             case 0x0C:
@@ -128,10 +140,13 @@ void Frame::calcData() {
             case 0x04:
                 if (data == 0x99) {
                     frameState = 0x01;
-                    //std::cout << "Ich habe auf unerklärliche Weise einen ACK erstellt\n";
-                } else {
+                    //std::cout << "Ich habe einen ACK erstellt\n";
+                } else if (data == 0x66) {
                     frameState = 0x02;
                     std::cout << "Ich habe einen Error erstellt\n";
+                } else {
+                    frameState = 0x03;
+                    std::cout << "Ich habe einen Fin erstellt\n";
                 }
                 break;
         }
