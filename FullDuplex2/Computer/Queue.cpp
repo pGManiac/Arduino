@@ -161,7 +161,7 @@ void Queues::send() {
     } else {
         if (sendingQueue.head != nullptr) {
             //std::cout << "Queues::send() head not empty\n";
-            serialPort.sendBytes(sendingQueue.head->frame->hardWareBytes,8);
+            serialPort.sendBytes(sendingQueue.head->frame->hardWareBytes,sizeof(sendingQueue.head->frame->hardWareBytes));
             sendingQueue.readyToSend = false;
             removeIfACK();
         }
@@ -210,7 +210,7 @@ void Queues::receive() {
  */
 void Queues::processReceive() {
     if(receivedQueue.head != nullptr) {
-        Frame* frame;
+        Frame* frame = nullptr;
         std::cout << "Data receivedqueue head:" << static_cast<int>(receivedQueue.head->frame->data) << "\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
         switch(receivedQueue.head->frame->frameState) {
