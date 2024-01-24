@@ -22,8 +22,8 @@ int main() {
 
     // Read input from standard input (stdin)
     while (std::getline(std::cin, line)) {
-        for (int i = 0; i < line.length(); i++) {
-            character = line.at(i);
+        for (char i : line) {
+            character = i;
             queues.sendByte(character);
         }
     }

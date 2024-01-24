@@ -64,13 +64,10 @@ void SerialPort::flush() const {
  * @param size The size of the array of bytes.
  */
 void SerialPort::sendBytes(const uint8_t* data , size_t size) {
-
-    std::cout << "sendBytes sent this: ";
-    for (size_t i = 0; i < size; i++) {
-        std::cout << static_cast<int>(data[i]) << " ";
+    if (data == nullptr) {
+        std::cerr << "Error: Null pointer in SerialPort::sendBytes.\n";
+        return;
     }
-    std::cout << "\n";
-
     if (write(fd, data, size) == -1) {
         std::cerr << "Error writing to serial port.\n";
     }

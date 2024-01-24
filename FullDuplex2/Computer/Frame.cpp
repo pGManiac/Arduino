@@ -110,6 +110,12 @@ void Frame::calcBytesToBeSent() {
             hardWareBytes[7] = 0x08 | ((checksum & 0x03));
             break;
     }
+    std::cout << "HardWareBytes in Constructor: ";
+    for (size_t i = 0; i < sizeof(hardWareBytes); ++i) {
+        std::cout << static_cast<int>(hardWareBytes[i]) << " ";
+    }
+    std::cout << "\n";
+    std::cout << "With framestate: " << static_cast<int>(frameState) << "\n";
 }
 
 

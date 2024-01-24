@@ -249,6 +249,7 @@ void Queues::processReceive() {
                 std::cout << "receivedQueue head ist FIN\n";
                 receivedFIN = true;
 
+                frame = new Frame(true);
                 sendingQueue.enqueueAtFront(frame);
 
                 sendingQueue.readyToSend = true;
