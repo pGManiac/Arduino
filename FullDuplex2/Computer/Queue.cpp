@@ -163,6 +163,9 @@ void Queues::send() {
             //std::cout << "Queues::send() head not empty\n";
             serialPort.sendBytes(sendingQueue.head->frame->hardWareBytes,sizeof(sendingQueue.head->frame->hardWareBytes));
             sendingQueue.readyToSend = false;
+            if(sendingQueue.head->frame->frameState == 3) {
+                sentFIN = true;
+            }
             removeIfACK();
         }
     }
