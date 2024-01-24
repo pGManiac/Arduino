@@ -176,11 +176,13 @@ void Queues::send() {
      * Sets the sentACK flag accordingly.
      */
 void Queues::removeIfACK() {
-    if (sendingQueue.head != nullptr && sendingQueue.head->frame->frameState == 1) {
-        sendingQueue.dequeue();
-        sendingQueue.sentACK = true;
-    } else {
-        sendingQueue.sentACK = false;
+    if(sendingQueue.head != nullptr) {
+        if(sendingQueue.head->frame != nullptr) {
+            if(sendingQueue.head->frame->frameState == 1) {
+                sendingQueue.dequeue();
+                sendingQueue.sentACK = true;
+            }
+        }
     }
 }
 
@@ -208,8 +210,8 @@ void Queues::receive() {
  * the sending process.
  */
 void Queues::processReceive() {
-    Frame* frame;
     if(receivedQueue.head != nullptr) {
+        Frame* frame;
         std::cout << "Data receivedqueue head:" << static_cast<int>(receivedQueue.head->frame->data) << "\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
         switch(receivedQueue.head->frame->frameState) {
@@ -221,7 +223,7 @@ void Queues::processReceive() {
                 sendingQueue.enqueueAtFront(frame);
 
                 //Ich bin mir verhältnismäßig sicher, dass diese line hier keinen Sinn ergeben hat.
-                //sendingQueue.readyToSend = true;
+                sendingQueue.readyToSend = true;
 
                 receivedQueue.dequeue();
                 break;
@@ -249,6 +251,8 @@ void Queues::processReceive() {
                 receivedFIN = true;
 
                 sendingQueue.enqueueAtFront(frame);
+
+                sendingQueue.readyToSend = true;
 
                 receivedQueue.dequeue();
                 break;
