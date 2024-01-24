@@ -31,10 +31,6 @@ int main() {
 
     while((queues.isReceivedFIN() == 0) || (queues.isSentFIN() == 0) || (queues.isSendingQueueReadyToSend() == 0)) {
         queues.send();
-        std::cout << "isReceivedFIN: " << queues.isReceivedFIN() << ", ";
-        std::cout << "isSentFIN: " << queues.isSentFIN() << ", ";
-        std::cout << "isSendingQueueReadyToSend: " << queues.isSendingQueueReadyToSend() << "\n";
-
 
         queues.receive();
 
