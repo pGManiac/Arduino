@@ -90,11 +90,7 @@ private:
 public:
     Queues(const char*);
 
-    void openInputFile(const char*);
-
     void openOutputFile(const char*);
-
-    void closeInputFile();
 
     void closeOutputFile();
 

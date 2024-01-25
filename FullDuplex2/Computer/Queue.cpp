@@ -77,20 +77,6 @@ Queues::Queues(const char* _portName) : serialPort(_portName), inputFile(), outp
 }
 
 /**
-     * @brief Opens the input file.
-     * 
-     * Opens the input file in binary mode. If the input file can not be opened an error message is printed.
-     * 
-     * @param inputFileName The name of the input file to be opened.
-    */
-void Queues::openInputFile(const char* inputFileName) {
-    inputFile.open(inputFileName, std::ios::in | std::ios::binary);
-    if(!inputFile.is_open()) {
-        std::cerr << "Error opening input file.\n";
-    }
-}
-
-/**
      * @brief Opens the output file.
      * 
      * Opens the output file in binary mode. If the input file can not be opened an error message is printed.
@@ -101,15 +87,6 @@ void Queues::openOutputFile(const char* outputFileName) {
     outputFile.open(outputFileName, std::ios::out | std::ios::binary);
     if(!outputFile.is_open()){
         std::cerr << "Error opening output file.\n";
-    }
-}
-
-/**
-     * @brief Closes the input file.
-    */
-void Queues::closeInputFile() {
-    if(inputFile.is_open()) {
-        inputFile.close();
     }
 }
 
