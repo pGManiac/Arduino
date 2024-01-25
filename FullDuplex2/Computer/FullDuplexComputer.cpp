@@ -4,6 +4,7 @@
 #include "SerialPort.hpp"
 #include <string>
 #include <iostream>
+#include <iterator>
 
 const char* portName = "/dev/ttyUSB0";
 const char* inputFileName = "input.txt";
