@@ -68,7 +68,7 @@ struct SendToArduinoQueue {
         PORTC = queue.head->byte;
         queue.dequeue();
         length--;
-        delay(10);
+        delay(18);
       }
     }
   }
@@ -88,6 +88,7 @@ void setup() {
   PORTB = 0x00;
   PCMSK0 = 0x04;
   PCICR = 0x01;
+  PORTC = 0x00;
   pinMode(2, OUTPUT);
   sei();
   Serial.flush();
