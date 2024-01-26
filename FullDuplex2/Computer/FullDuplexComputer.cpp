@@ -2,8 +2,6 @@
 
 #include "Queue.hpp"
 #include "SerialPort.hpp"
-#include <string>
-#include <iostream>
 #include <iterator>
 
 const char* portName = "/dev/ttyUSB0";
@@ -15,6 +13,9 @@ int main() {
     Queues queues(portName);
 
     usleep(5000000);
+
+    // Record the start time
+    auto startTime = std::chrono::high_resolution_clock::now();
 
     std::vector<uint8_t> binaryData;
     uint8_t character;
@@ -50,5 +51,14 @@ int main() {
 
         queues.processReceive();
     }
+
+    // Record the end time
+    auto endTime = std::chrono::high_resolution_clock::now();
+
+    // Calculate the elapsed time
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+    std::cout << "Execution time: " << duration.count() << " milliseconds" << std::endl;
+
+
     return 0;
 }
