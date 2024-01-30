@@ -176,7 +176,7 @@ void Queues::receive() {
             for(int i = 0; i < 8; i++) {
                 std::cout << static_cast<int>(newFrame->hardWareBytes[i])  << "\n";
             }
-             
+
          */
         serialPort.makeBufferNotAvailable();
         receivedQueue.enqueue(newFrame);
@@ -197,7 +197,7 @@ void Queues::processReceive() {
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
         switch(receivedQueue.head->frame->frameState) {
             case 0: //data
-                //std::cout << "Frame data: " << receivedQueue.head->frame->data;
+                std::cout << receivedQueue.head->frame->data;
                 frame = new Frame(true);
                 sendingQueue.enqueueAtFront(frame);
                 sendingQueue.readyToSend = true;
