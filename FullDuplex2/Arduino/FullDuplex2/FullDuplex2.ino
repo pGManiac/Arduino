@@ -89,16 +89,12 @@ void setup() {
   PCMSK0 = 0x04;
   PCICR = 0x01;
   PORTC = 0x00;
-  pinMode(2, OUTPUT);
+  pinMode(2, OUTPUT); 
   sei();
   Serial.flush();
 }
 
 void loop() {
-  //uint8_t byte = 255;
-  //Serial.write(byte);
-  //Serial.flush(); 
-  //Serial.write(50);
   delay(10);
   sendToArduinoQueue.readFromPC();
   sendToArduinoQueue.sendToArduino();

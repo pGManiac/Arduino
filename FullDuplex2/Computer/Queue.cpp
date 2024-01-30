@@ -180,7 +180,7 @@ void Queues::receive() {
          */
         serialPort.makeBufferNotAvailable();
         receivedQueue.enqueue(newFrame);
-        //std::cout << "Framestate of the received byte: " << static_cast<int>(newFrame->frameState) << "\n";  // Enqueue the pointer
+        std::cout << "Framestate of the received byte: " << static_cast<int>(newFrame->frameState) << "\n";  // Enqueue the pointer
     }
 }
 
