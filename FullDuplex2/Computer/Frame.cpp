@@ -49,13 +49,13 @@ Frame::Frame(bool acknowledge) {
     //std::cout << "BOOLEAN constructor\n";
 
     if(acknowledge) {
-        std::cout << "created ack frame\n";
+        //std::cout << "created ack frame\n";
         data = 0b10011001;
         checksum = data ^ xorChecksum;
         frameState = 1;
         calcBytesToBeSent();
     } else {
-        std::cout << "created an error frame\n";
+        //std::cout << "created an error frame\n";
         data = 0b01100110;
         checksum = data ^ xorChecksum;
         frameState = 2;
@@ -65,7 +65,7 @@ Frame::Frame(bool acknowledge) {
 
 Frame::Frame(const std::string fin) {
     if(fin == "fin") {
-        std::cout << "created fin frame\n";
+        //std::cout << "created fin frame\n";
         data = 0b01010101;
         checksum = data ^ xorChecksum;
         frameState = 3;
@@ -84,8 +84,6 @@ Frame::Frame(const std::string fin) {
      * to the least significant position and combining them with clock and frame bit to a byte.
      */
 void Frame::calcBytesToBeSent() {
-    //highest significant bits first
-    //std::cout << "Sent this data: " << static_cast<int>(data) << "\n";
     switch (frameState) {
         case 0:
             hardWareBytes[0] = 0x0C | ((data & 0xC0) >> 6);
@@ -110,12 +108,16 @@ void Frame::calcBytesToBeSent() {
             hardWareBytes[7] = 0x08 | ((checksum & 0x03));
             break;
     }
-    std::cout << "HardWareBytes in Constructor: ";
-    for (size_t i = 0; i < sizeof(hardWareBytes); ++i) {
-        std::cout << static_cast<int>(hardWareBytes[i]) << " ";
-    }
-    std::cout << "\n";
-    std::cout << "With framestate: " << static_cast<int>(frameState) << "\n";
+    /**
+     *
+
+        std::cout << "HardWareBytes in Constructor: ";
+        for (size_t i = 0; i < sizeof(hardWareBytes); ++i) {
+            std::cout << static_cast<int>(hardWareBytes[i]) << " ";
+        }
+        std::cout << "\n";
+        std::cout << "With framestate: " << static_cast<int>(frameState) << "\n";
+     */
 }
 
 
@@ -145,15 +147,14 @@ void Frame::calcData() {
             case 0x04:
                 if (data == 0x99) {
                     frameState = 0x01;
-                    //std::cout << "Ich habe einen ACK erstellt\n";
                 } else if (data == 0x66) {
                     frameState = 0x02;
-                    std::cout << "Ich habe einen Error erstellt\n";
                 } else {
                     frameState = 0x03;
-                    std::cout << "Ich habe einen Fin erstellt\n";
                 }
                 break;
         }
     }
 }
+
+

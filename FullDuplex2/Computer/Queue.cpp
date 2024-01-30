@@ -133,8 +133,7 @@ void Queues::writeByteToFile(uint8_t& byte, const char* filename) {
      */
 void Queues::send() {
     if (!sendingQueue.readyToSend) {
-        //std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        //std::cout << "not ready to send\n";
+        return;
     } else {
         if (sendingQueue.head != nullptr) {
             //std::cout << "Queues::send() head not empty\n";
@@ -172,12 +171,14 @@ void Queues::receive() {
     serialPort.receive8Bytes();
     if(serialPort.getBufferAvailability()) {
         Frame *newFrame = new Frame(serialPort.getReadBuffer());
-        for(int i = 0; i < 8; i++) {
-            std::cout << static_cast<int>(newFrame->hardWareBytes[i])  << "\n";
-        }
+        /**
+            for(int i = 0; i < 8; i++) {
+                std::cout << static_cast<int>(newFrame->hardWareBytes[i])  << "\n";
+            }
+         */
         serialPort.makeBufferNotAvailable();
         receivedQueue.enqueue(newFrame);
-        std::cout << "Framestate of the received byte: " << static_cast<int>(newFrame->frameState) << "\n";  // Enqueue the pointer
+        //std::cout << "Framestate of the received byte: " << static_cast<int>(newFrame->frameState) << "\n";  // Enqueue the pointer
     }
 }
 
@@ -191,24 +192,17 @@ void Queues::receive() {
 void Queues::processReceive() {
     if(receivedQueue.head != nullptr) {
         Frame* frame = nullptr;
-        std::cout << "Data receivedqueue head:" << static_cast<int>(receivedQueue.head->frame->data) << "\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
         switch(receivedQueue.head->frame->frameState) {
             case 0: //data
-                // Send to file
-                std::cout << "Case 0 data: " << receivedQueue.head->frame->data << "\n"; //print on terminal for test
-                writeByteToFile(receivedQueue.head->frame->data, "output.txt");
+                std::cout << receivedQueue.head->frame->data;
                 frame = new Frame(true);
                 sendingQueue.enqueueAtFront(frame);
-
-                //Ich bin mir verhältnismäßig sicher, dass diese line hier keinen Sinn ergeben hat.
                 sendingQueue.readyToSend = true;
-
                 receivedQueue.dequeue();
                 break;
 
             case 1: //ACK
-                std::cout << "receivedQueue head ist ACK\n";
                 sendingQueue.dequeue();
                 sendingQueue.readyToSend = true;
                 receivedQueue.dequeue();
@@ -220,31 +214,24 @@ void Queues::processReceive() {
                     sendingQueue.enqueueAtFront(frame);
                 }
                 sendingQueue.readyToSend = true;
-                std::cout << "receivedQueue head ist error\n";
                 receivedQueue.dequeue();
-                send();  // Potential recursive call?
+                send();
                 break;
 
             case 3: //Fin
-                std::cout << "receivedQueue head ist FIN\n";
                 receivedFIN = true;
-
                 frame = new Frame(true);
                 sendingQueue.enqueueAtFront(frame);
-
                 sendingQueue.readyToSend = true;
-
                 receivedQueue.dequeue();
                 break;
             default: //Fail
                 frame = new Frame(false);
                 sendingQueue.enqueueAtFront(frame);
-                std::cout << "receivedQueue head ist fail state\n";
                 receivedQueue.dequeue();
                 break;
         }
     }
-
 }
 
 /**

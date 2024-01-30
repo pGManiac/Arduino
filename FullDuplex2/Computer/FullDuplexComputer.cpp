@@ -57,7 +57,27 @@ int main() {
 
     // Calculate the elapsed time
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
-    std::cout << "Execution time: " << duration.count() << " milliseconds" << std::endl;
+    // Open a file for writing
+    std::ofstream outputFile("execution_time.txt");
+
+    // Check if the file is open before writing
+    if (outputFile.is_open()) {
+        // Write the execution time to the file
+        outputFile << "Execution time: " << duration.count() << " milliseconds" << std::endl;
+
+        // Close the file
+        outputFile.close();
+    } else {
+        // Handle the case where the file couldn't be opened
+        std::cerr << "Error: Unable to open the file for writing." << std::endl;
+        return 1;  // Return an error code
+    }
+
+
+
+
+
+    //std::cout << "Execution time: " << duration.count() << " milliseconds" << std::endl;
 
 
     return 0;

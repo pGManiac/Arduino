@@ -104,7 +104,7 @@ void SerialPort::receive8Bytes() {
                 for (uint8_t & i : buffByte) {
                     i = 0   ;
                 }
-                std::cout << "Nicht genug bytes bekommen -> Fail hardwarebytes erstellen\n";
+                //std::cout << "Nicht genug bytes bekommen -> Fail hardwarebytes erstellen\n";
                 fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
                 char trashbuffer[8];
                 read(fd, trashbuffer, sizeof(trashbuffer));
