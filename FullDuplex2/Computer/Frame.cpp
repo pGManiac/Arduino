@@ -33,7 +33,7 @@ Frame::Frame(const uint8_t* _receivedBytes) {
         for(uint8_t i = 0; i < 8; i++) {
             hardWareBytes[i] = _receivedBytes[i];
         }
-    //std::cout << "HARDWARE constructor\n";
+    std::cout << "HARDWARE constructor\n";
 
     calcData();
 }
@@ -49,13 +49,13 @@ Frame::Frame(bool acknowledge) {
     //std::cout << "BOOLEAN constructor\n";
 
     if(acknowledge) {
-        //std::cout << "created ack frame\n";
+        std::cout << "created ack frame\n";
         data = 0b10011001;
         checksum = data ^ xorChecksum;
         frameState = 1;
         calcBytesToBeSent();
     } else {
-        //std::cout << "created an error frame\n";
+        std::cout << "created an error frame\n";
         data = 0b01100110;
         checksum = data ^ xorChecksum;
         frameState = 2;
@@ -65,7 +65,7 @@ Frame::Frame(bool acknowledge) {
 
 Frame::Frame(const std::string fin) {
     if(fin == "fin") {
-        //std::cout << "created fin frame\n";
+        std::cout << "created fin frame\n";
         data = 0b01010101;
         checksum = data ^ xorChecksum;
         frameState = 3;

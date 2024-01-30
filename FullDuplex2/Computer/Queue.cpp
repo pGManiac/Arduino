@@ -171,14 +171,12 @@ void Queues::receive() {
     serialPort.receive8Bytes();
     if(serialPort.getBufferAvailability()) {
         Frame *newFrame = new Frame(serialPort.getReadBuffer());
-        /**
             for(int i = 0; i < 8; i++) {
                 std::cout << static_cast<int>(newFrame->hardWareBytes[i])  << "\n";
             }
-         */
         serialPort.makeBufferNotAvailable();
         receivedQueue.enqueue(newFrame);
-        //std::cout << "Framestate of the received byte: " << static_cast<int>(newFrame->frameState) << "\n";  // Enqueue the pointer
+        std::cout << "Framestate of the received byte: " << static_cast<int>(newFrame->frameState) << "\n";  // Enqueue the pointer
     }
 }
 
